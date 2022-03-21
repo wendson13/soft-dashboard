@@ -1,10 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';;
+import styled from 'styled-components';import { Navbar } from '../Navbar';
+;
 
 export function PageLayout () {
   return (
     <Container>
       
+      <Navbar />
       <Outlet />
     
     </Container>
