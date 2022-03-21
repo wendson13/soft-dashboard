@@ -1,8 +1,13 @@
+import { Dashboard } from './pages/Dashboard';
+import { Routes, Route,  } from "react-router-dom";
+import { PageLayout } from './components/PageLayout';
 
 export function App() {
   return (
-    <div>
-      <h1>Soft Dashboard</h1>
-    </div>
+    <Routes>
+      <Route element={<PageLayout />}>
+        <Route index element={<Dashboard />} />
+      </Route>
+    </Routes>
   )
 }
