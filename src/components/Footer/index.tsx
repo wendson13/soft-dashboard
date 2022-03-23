@@ -14,12 +14,12 @@ export function Footer () {
       </span>
 
       <div>
-        <a href="https://github.com/wendson13" target='_blank' ref='noopener'>
+        <a href="https://github.com/wendson13" target='_blank' rel='noopener'>
           Github
         </a>
         <a href="#">About Us</a>
         <a href="#">Blog</a>
-        <a href="https://github.com/wendson13/soft-dashboard/blob/main/LICENSE" target='_blank' ref='noopener'>
+        <a href="https://github.com/wendson13/soft-dashboard/blob/main/LICENSE" target='_blank' rel='noopener'>
           License
         </a>
       </div>

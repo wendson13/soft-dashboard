@@ -5,8 +5,11 @@ import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/global';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
+import { makeServer } from './mirage';
 
-
+if (import.meta.env.DEV) {
+  makeServer({ environment: "development" })
+}
 
 ReactDOM.render(
   <React.StrictMode>
