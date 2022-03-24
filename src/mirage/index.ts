@@ -187,16 +187,22 @@ export function makeServer({ environment = "test" } = {}) {
       })
 
       this.get('user/notification', () => {
-        return (
-          Array.from({ length: Math.ceil(Math.random() * 5)}).map(() => {
-            return {
-              imageUrl: 'https://github.com/wendson13.png',
-              name: faker.name.findName(),
-              message: faker.lorem.paragraph(),
-              date: faker.date.past(),
-            }
-          })
-        );
+        const totalNotifications = Math.ceil(Math.random() * 10)
+
+        return {
+          notifications: (
+            Array.from({ length: 5}).map((_, index) => {
+              return {
+                id: index,
+                imageUrl: 'https://github.com/wendson13.png',
+                name: faker.name.firstName(),
+                type: 'New message',
+                date: faker.date.past(index + 1, new Date(`${new Date().getFullYear() - index}`).toJSON()),
+              }
+            })
+          ),
+          total: totalNotifications
+        }
       })
 
       this.get('user/authors', (schema, _) => {

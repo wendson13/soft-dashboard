@@ -86,7 +86,6 @@ export const NotificationButton = styled.button`
 
 export const NotificationsContent = styled.div`
   width: 20rem;
-  height: calc(100vh - 7rem);
   position: absolute;
   top: 4rem;
   right: 1.5rem;
@@ -119,9 +118,8 @@ export const NotificationsContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: .5rem;
     list-style: none;
-    overflow-y: scroll;
+    overflow-y: hidden;
     opacity: 0;
     
     border-radius: .5rem;
@@ -140,6 +138,7 @@ export const NotificationsContent = styled.div`
       gap: 2rem;
       padding: 1rem 0;
       transition: .3s;
+      cursor: pointer;
 
       &:hover {
         background: ${({theme}) => theme.colors.gray4};
@@ -171,6 +170,21 @@ export const NotificationsContent = styled.div`
           gap: 1rem;
           color: ${({theme}) => theme.colors.gray7};
         }
+      }
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      font-size: 1.25rem;
+      font-weight: 500;
+      padding: 1rem;
+      border-top: .1rem solid ${({theme}) => theme.colors.gray5};
+      background: transparent;
+      transition: .3s;
+
+      &:hover {
+        background: ${({theme}) => theme.colors.gray3};
       }
     }
   }
