@@ -6,6 +6,7 @@ import { useTheme } from 'styled-components';
 import { Container, Menu, NotificationButton, Notifications, NotificationsContent, Search, Settings, SignIn, Title } from './styles';
 import ReactModal from 'react-modal';
 import { api } from '../../services/api';
+import { Spinner } from '../Loading';
 
 type NotificationType = {
   id: number;
@@ -26,19 +27,11 @@ export function Header () {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [data, setData] = useState<NotificationsType>();
 
-  
-
   useEffect(() => {
     api.get<NotificationsType>('user/notification').then(({data}) => {
       setData(data);
     })
   }, [])
-
-  if(!data){
-    return (
-      <Container />
-    );
-  }
 
   const timeSince = (date: Date) => {
 
@@ -122,6 +115,7 @@ export function Header () {
             left: 0,
             right: 0,
             bottom: 0,
+            zIndex: 10,
           },
         }}
         closeTimeoutMS={250}
@@ -151,6 +145,7 @@ export function Header () {
       >
         <ul className={isOpenNotification ? 'active' : ''}>
           {
+            data ?
             data.notifications.map(notification => {
               return (
                 <li key={notification.id}>
@@ -172,9 +167,15 @@ export function Header () {
                 </li>
               );
             })
+            :
+
+            <div>
+              <Spinner size={5} borderSize={.75} />
+            </div>
           }
 
           {
+            data &&
             data.total > 5 &&
             <button>More</button>
           }

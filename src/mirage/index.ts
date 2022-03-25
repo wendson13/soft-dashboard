@@ -203,7 +203,7 @@ export function makeServer({ environment = "test" } = {}) {
           ),
           total: totalNotifications
         }
-      })
+      }, { timing: 2000 })
 
       this.get('user/authors', (schema, _) => {
         const projects = schema.all('project').models as Project[];

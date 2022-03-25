@@ -129,14 +129,21 @@ export const NotificationsContent = styled.div`
       opacity: 100%;
       transition: .3s;
     }
+
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
     
     > li {
       width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 2rem;
-      padding: 1rem 0;
+      padding: 1rem 0 1rem 1rem;
       transition: .3s;
       cursor: pointer;
 
