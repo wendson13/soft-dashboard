@@ -1,23 +1,32 @@
 import styled from 'styled-components';
 
+export const Container = styled.main`
+  padding: 0 1rem;
+`;
+
 export const WidgetBox = styled.section`
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+
+  @media screen and (max-width: 1080px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const Info = styled.section`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
   margin: 2rem 0;
 `;
 
 export const Documentation = styled.div`
-  max-width: 40rem;
-  height: 14rem;
+  width: 100%;
+  height: 16rem;
   display: flex;
   gap: 1rem;
   padding: 1rem;
@@ -32,23 +41,49 @@ export const Documentation = styled.div`
     gap: .5rem;
     
     span {
+      font-size: 1.1rem;
       font-weight: 500;
       color: ${({theme}) => theme.colors.gray8};
     }
-    strong {
-      font-size: 1.5rem;
+    h2 {
+      font-size: 1.75rem;
       color: ${({theme}) => theme.colors.dark};
     }
     button {
       display: flex;
       align-items: center;
       gap: .25rem;
-      font-size: 1rem;
+      font-size: 1.3rem;
       font-weight: 500;
       border: 0;
       margin-top: auto;
       color: ${({theme}) => theme.colors.gray8};
       background: transparent;
+      animation: .1s buttonHoverOut linear forwards;
+
+      &:hover {
+        animation: .3s buttonHoverIn linear forwards;
+      }
+    }
+  }
+
+  @keyframes buttonHoverIn {
+    50% {
+      gap: 1rem;
+    }
+
+    100% {
+      gap: .75rem;
+    }
+  }
+
+  @keyframes buttonHoverOut {
+    from {
+      gap: .75rem;
+    }
+
+    to {
+      gap: .25rem;
     }
   }
 `;
@@ -63,8 +98,8 @@ export const RocketBox = styled.div`
 `;
 
 export const Working = styled.div`
-  max-width: 28rem;
-  height: 14rem;
+  width: 100%;
+  height: 16rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -80,8 +115,8 @@ export const Working = styled.div`
     flex-direction: column;
     padding: 1rem;
     z-index: 1;
-    strong {
-      font-size: 1.5rem;
+    h2 {
+      font-size: 1.75rem;
       color: ${({theme}) => theme.colors.gray1};
     }
     p {
@@ -92,36 +127,60 @@ export const Working = styled.div`
       display: flex;
       align-items: center;
       gap: .25rem;
-      font-size: 1rem;
+      font-size: 1.3rem;
       font-weight: 500;
       border: 0;
       margin-top: auto;
       color: ${({theme}) => theme.colors.gray1};
       background: transparent;
+      animation: .1s buttonHoverOut linear forwards;
+
+      &:hover {
+        animation: .3s buttonHoverIn linear forwards;
+      }
     }
   }
   img {
     width: calc(100% - 2rem);
-    height: 12rem;
+    height: calc(100% - 2rem);
     object-fit: cover;
     border-radius: .5rem;
     position: absolute;
     filter: brightness(.5);
   }
+
+  @keyframes buttonHoverIn {
+    50% {
+      gap: 1rem;
+    }
+
+    100% {
+      gap: .75rem;
+    }
+  }
+
+  @keyframes buttonHoverOut {
+    from {
+      gap: .75rem;
+    }
+
+    to {
+      gap: .25rem;
+    }
+  }
 `;
 
 export const ChartsBox = styled.section`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 2rem;
 `;
 
 export const TablesBox = styled.section`
-  display: flex;
-  justify-content: space-evenly;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  justify-content: space-between;
+  gap: 2rem;
   margin: 2rem 0;
-  flex-wrap: wrap;
 `;

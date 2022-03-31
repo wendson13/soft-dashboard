@@ -30,6 +30,10 @@ export function makeServer({ environment = "test" } = {}) {
     factories: {
       project: Factory.extend({
         id() {
+          return faker.datatype.uuid();
+        },
+
+        name() {
           return faker.company.companyName();
         },
 
@@ -38,7 +42,7 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         members() {
-          return [
+          return (
             Array.from({ length: 6}).map(() => (
                 {
                   email: faker.internet.email(),
@@ -46,7 +50,7 @@ export function makeServer({ environment = "test" } = {}) {
                 }
               )
             )
-          ]
+          )
         },
 
         budget() {
@@ -87,6 +91,29 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.get("/projects", (schema, _) => {
         const projects = schema.all('project').models as Project[];
+
+        const summaryMonth = () => {
+          return Array.from({ length: 12}).map((_,index) => {
+            return {
+              month: monthly[index],
+              money: faker.datatype.number({ min: 100, max: 1000 }),
+              users: faker.datatype.number({ min: 100, max: 1000 }),
+              clients: faker.datatype.number({ min: 10, max: 100 }),
+              sales: faker.datatype.number({ min: 100, max: 50000 }),
+              clicks: faker.datatype.number({ min: 100, max: 10000000 }),
+              items: faker.datatype.number({ min: 5, max: 100 }),
+            }
+          })
+        }
+
+        const currentYear = new Date().getFullYear();
+
+        const summaryYear = Array.from({ length: 2 }).map((_, index) => {
+          return {
+            year: faker.date.between(new Date(`${currentYear - index}`).toJSON(), new Date(`${currentYear - (index + 1)}`).toJSON()).getFullYear(),
+            monthly: summaryMonth()
+          }
+        })
         
         return {
           projects,
@@ -96,28 +123,30 @@ export function makeServer({ environment = "test" } = {}) {
             users: projects.reduce((count, project) => project.users + count, 0),
             clients: projects.reduce((count, project) => project.clients + count, 0),
             sales: projects.reduce((count, project) => project.sales + count, 0),
+          },
+
+          summaryMonth: summaryMonth(),
+
+          summaryYear,
+
+          orders: {
+            lastMonth:  Math.ceil(Math.random() * 10),
+
+            list: (
+              Array.from({ length: 5}).map((_,index) => {
+                return {
+                  id: index + 1,
+                  imageUrl: 'https://github.com/wendson13.png',
+                  message: `New order #${faker.datatype.number({min: 10000000, max: 99999999})}`,
+                  createdAt: faker.date.past()
+                }
+              })
+            )
           }
         };
       });
 
       this.get("projects/:id");
-
-      this.get('projects/month', () => {
-
-        return (
-          Array.from({ length: 12}).map((_,index) => {
-            return {
-              month: monthly[index],
-              money: faker.datatype.number({ min: 100, max: 1000 }),
-              users: faker.datatype.number({ min: 100, max: 1000 }),
-              clients: faker.datatype.number({ min: 10, max: 100 }),
-              sales: faker.datatype.number({ min: 100, max: 50000 }),
-              clicks: faker.datatype.number({ min: 100, max: 100000 }),
-              items: faker.datatype.number({ min: 5, max: 100 }),
-            }
-          })
-        )
-      })
 
       this.get('projects/sales/years', () => {
         return [
@@ -166,24 +195,6 @@ export function makeServer({ environment = "test" } = {}) {
             )
           },
         ]
-      })
-
-      this.get('user/orders', () => {
-
-        return {
-          lastMonth:  Math.ceil(Math.random() * 10),
-
-          orders: (
-            Array.from({ length: 5}).map((_,index) => {
-              return {
-                id: index + 1,
-                imageUrl: 'https://github.com/wendson13.png',
-                message: `${faker.finance.transactionDescription()}`,
-                createdAt: faker.date.past()
-              }
-            })
-          )
-        }
       })
 
       this.get('user/notification', () => {
