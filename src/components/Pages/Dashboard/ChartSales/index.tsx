@@ -85,7 +85,7 @@ export function ChartSales ({ summaryYear } : ChartSalesProps) {
   return (
     <BoxShadow style={{ width: '53%' }}>
       <TitleBox>
-        <strong>Sales Overview</strong>
+        <h2>Sales Overview</h2>
         <span>
           {
             summaryYear.differenceYearSales > 0 
@@ -138,7 +138,7 @@ const TitleBox = styled.div`
   flex-direction: column;
   gap: .5rem;
 
-  strong {
+  h2 {
     font-size: 1.5rem;
     font-weight: 700;
   }

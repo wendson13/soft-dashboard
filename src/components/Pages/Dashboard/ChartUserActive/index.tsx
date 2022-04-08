@@ -1,9 +1,8 @@
 import styled, { useTheme } from 'styled-components';
 import Chart from 'react-apexcharts';
-import { api } from '../../../../services/api';
 import { useEffect, useState } from 'react';
 import { Card } from './Card';
-import { FaMoneyCheckAlt, FaShoppingCart, FaTools } from 'react-icons/fa';
+import { FaMoneyCheckAlt, FaTools } from 'react-icons/fa';
 import { BsFiles } from 'react-icons/bs';
 import { IoRocketSharp } from 'react-icons/io5';
 import { calcPercentageDifference } from '../../../../pages/Dashboard';
@@ -106,7 +105,7 @@ export function ChartUserActive ({ projectInfo }: ChartUserActiveProps) {
       </ChartBox>
 
       <TitleBox>
-        <strong>Active Users</strong>
+        <h2>Active Users</h2>
         <span>
           <span>{userDifferencePercentage > 0 ? `(+${userDifferencePercentage.toFixed(0)}%)` 
           : `(${userDifferencePercentage.toFixed(0)}%)`}</span>
@@ -174,7 +173,7 @@ const TitleBox = styled.div`
   flex-direction: column;
   margin-bottom: 1rem;
 
-  strong {
+  h2 {
     margin: .5rem 0;
     font-size: 1.5rem;
     font-weight: 700;

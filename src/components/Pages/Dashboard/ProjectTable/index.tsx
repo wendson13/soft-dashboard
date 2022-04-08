@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { BoxShadow } from '../../../Styles/Containers';
 
@@ -17,7 +16,7 @@ type Project = {
   sales: number;
   budget: number;
   percentageCompeted: number;
-  status: 'progress' | 'cancel' | "complete";
+  status: 'working' | 'canceled' | 'done';
 }
 
 type ProjectsTableProps = {
@@ -30,7 +29,7 @@ export function ProjectsTable ({ projects, percentage } : ProjectsTableProps) {
   return (
     <BoxShadow>
       <TitleBox>
-        <strong>Projects</strong>
+        <h2>Projects</h2>
         <p>
           done this month
           <span>{`${percentage}%`}</span>
@@ -84,8 +83,8 @@ export function ProjectsTable ({ projects, percentage } : ProjectsTableProps) {
                   </td>
                   <td>
                     {
-                      project.status === 'cancel' ? 
-                      'cancel'
+                      project.status === 'canceled' ? 
+                      'canceled'
                       :
                       `${project.percentageCompeted}%`
                     }
@@ -108,7 +107,7 @@ const TitleBox = styled.div`
   padding: 1rem;
 
 
-  strong {
+  h2 {
     font-size: 1.5rem;
     font-weight: 700;
     color: ${({theme}) => theme.colors.dark};
@@ -158,7 +157,7 @@ const Table = styled.table`
 
 type TableRowBodyProps = {
   percentage: string;
-  status: 'complete' | 'cancel' | 'progress';
+  status: 'working' | 'canceled' | 'done';
 }
 
 const TableRowBody = styled.tr<TableRowBodyProps>`
@@ -204,13 +203,13 @@ const TableRowBody = styled.tr<TableRowBodyProps>`
         display: block;
         border-radius: 1rem;
         background: ${({status, theme}) => {
-          if(status === 'complete'){
+          if(status === 'done'){
             return theme.colors.success;
           }
-          if(status === 'progress'){
+          if(status === 'working'){
             return theme.colors.info;
           }
-          if(status === 'cancel'){
+          if(status === 'canceled'){
             return theme.colors.danger;
           }
         }};

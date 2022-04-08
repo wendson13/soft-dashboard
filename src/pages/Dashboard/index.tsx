@@ -4,8 +4,6 @@ import { BsArrowRightShort } from 'react-icons/bs';
 import { FaMoneyCheckAlt, FaShoppingCart } from 'react-icons/fa';
 import { GiDiploma, GiEarthAmerica } from 'react-icons/gi';
 import { IoRocketSharp } from 'react-icons/io5';
-import { Footer } from '../../components/Footer';
-import { Header } from '../../components/Header';
 import { WidgetCard } from '../../components/Pages/Dashboard/WidgetCard';
 import { ChartUserActive } from '../../components/Pages/Dashboard/ChartUserActive';
 import { ChartSales } from '../../components/Pages/Dashboard/ChartSales';
@@ -59,7 +57,7 @@ type Project = {
   sales: number;
   budget: number;
   percentageCompeted: number;
-  status: 'progress' | 'cancel' | "complete";
+  status: 'working' | 'canceled' | 'done';
 }
 
 type DataFetch = {
@@ -156,7 +154,7 @@ export function Dashboard () {
 
 
       const countProjectsComplete = data.projects
-      .filter(project => project.status === 'complete').length;
+      .filter(project => project.status === 'done').length;
 
       const totalProjects = data.projects.length
       const percentage = (countProjectsComplete * 100) / totalProjects;

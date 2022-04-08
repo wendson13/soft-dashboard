@@ -1,4 +1,4 @@
-import { createServer, Factory, Model } from 'miragejs';
+import { createServer, Factory, Model, Response } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 type User = {
@@ -16,6 +16,16 @@ type Project = {
   percentageCompeted: number;
 }
 
+type Author = {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  status: string;
+  employed: string;
+  functions: string;
+}
+
 export function makeServer({ environment = "test" } = {}) {
   
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
@@ -25,6 +35,7 @@ export function makeServer({ environment = "test" } = {}) {
 
     models: {
       project: Model.extend<Partial<Project>>({}),
+      author: Model.extend<Partial<Author>>({}),
     },
 
     factories: {
@@ -74,22 +85,78 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         status() {
-          const status = ['progress', 'cancel', 'complete']
+          const status = ['working', 'canceled', 'done']
 
           return status[Math.round(Math.random() * 2)]
+        }
+      }),
+
+      author: Factory.extend({
+        id() {
+          return faker.datatype.uuid()
+        },
+
+        name() {
+          return faker.name.findName()
+        },
+
+        email() {
+          return faker.internet.email()
+        },
+
+        imageUrl() {
+          return 'https://github.com/wendson13.png'
+        },
+
+        status() {
+          const statusType = ['Online', 'Offline']
+
+          return statusType[Math.round(Math.random())]
+        },
+
+        employed() {
+          return faker.date.past(Math.ceil(Math.random() * 20))
+        },
+
+        functions() {
+          const functionsType = [
+            {
+              primary: 'Manager',
+              secondary: 'Organization'
+            },
+            {
+              primary: 'Programmer',
+              secondary: 'Developer'
+            },
+            {
+              primary: 'Executive',
+              secondary: 'Projects'
+            },
+            {
+              primary: 'Marketing',
+              secondary: 'Organization'
+            },
+            {
+              primary: 'Tester',
+              secondary: 'Developer'
+            },
+          ]
+
+          return functionsType[Math.ceil(Math.random() * 4)]
         }
       })
     },
 
     seeds(server) {
       server.createList('project', 50);
+      server.createList('author', 5);
     },
 
     routes() {
       this.namespace = 'api';
       this.timing = 750;
 
-      this.get("/projects", (schema, _) => {
+      this.get('/projects', (schema, _) => {
         const projects = schema.all('project').models as Project[];
 
         const summaryMonth = () => {
@@ -146,56 +213,47 @@ export function makeServer({ environment = "test" } = {}) {
         };
       });
 
-      this.get("projects/:id");
+      this.get('projects/:id');
 
-      this.get('projects/sales/years', () => {
-        return [
-          {
-            year: 2019,
-            monthly: (
-              Array.from({ length: 12}).map((_,index) => {
-                return {
-                  month: monthly[index],
-                  sales: faker.datatype.number({ min: 1000, max: 50000})
-                }
-              })
-            )
-          },
-          {
-            year: 2020,
-            monthly: (
-              Array.from({ length: 12}).map((_,index) => {
-                return {
-                  month: monthly[index],
-                  sales: faker.datatype.number({ min: 1000, max: 50000})
-                }
-              })
-            )
-          },
-          {
-            year: 2021,
-            monthly: (
-              Array.from({ length: 12}).map((_,index) => {
-                return {
-                  month: monthly[index],
-                  sales: faker.datatype.number({ min: 1000, max: 50000})
-                }
-              })
-            )
-          },
-          {
-            year: 2022,
-            monthly: (
-              Array.from({ length: 12}).map((_,index) => {
-                return {
-                  month: monthly[index],
-                  sales: faker.datatype.number({ min: 1000, max: 50000})
-                }
-              })
-            )
-          },
-        ]
-      })
+      this.post('projects/:id', (schema, req) => {
+        
+        const id = req.params.id;
+        const data = JSON.parse(req.requestBody)
+
+        const project = schema.findBy('project', {
+          id: id
+        })
+
+        if(project){
+          project.update({
+            status: data.status,
+            budget: data.budget,
+            percentageCompeted: data.percentageCompeted
+          })
+          
+          return project.attrs
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      }, { timing: 5000 })
+
+      this.delete('projects/:id', (schema, req) => {
+        const id = req.params.id;
+
+        const project = schema.findBy('project', {
+          id: id
+        })
+
+        if(project){
+          project.destroy()
+
+          return new Response(200, {}, {});
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' });
+        }
+      }, { timing: 5000 })
 
       this.get('user/notification', () => {
         const totalNotifications = Math.ceil(Math.random() * 10)
@@ -217,47 +275,32 @@ export function makeServer({ environment = "test" } = {}) {
       }, { timing: 2000 })
 
       this.get('user/authors', (schema, _) => {
-        const projects = schema.all('project').models as Project[];
+        const authors = schema.all('author').models as Author[];
 
-        const statusType = ['Online', 'Offline']
-        const functionsType = [
-          {
-            primary: 'Manager',
-            secondary: 'Organization'
-          },
-          {
-            primary: 'Programmer',
-            secondary: 'Developer'
-          },
-          {
-            primary: 'Executive',
-            secondary: 'Projects'
-          },
-          {
-            primary: 'Marketing',
-            secondary: 'Organization'
-          },
-          {
-            primary: 'Tester',
-            secondary: 'Developer'
-          },
-        ]
-
-        const authors = projects.map((project) => {
-          return project.members.map(item => {
-           return {
-            name: faker.name.findName(),
-            email: item.email,
-            imageUrl: item.imageUrl,
-            status: statusType[Math.round(Math.random())],
-            employed: faker.date.past(Math.ceil(Math.random() * 20)),
-            functions: functionsType[Math.ceil(Math.random() * 4)]
-           }
-          })
-        })    
-
-        return authors[0];
+        return authors;
       })
+
+      this.post('user/authors/:id', (schema, req) => {
+        
+        const id = req.params.id;
+        const data = JSON.parse(req.requestBody)
+
+        const author = schema.findBy('author', {
+          id: id
+        })
+
+        if(author){
+          author.update({
+            employed: data.employed,
+            functions: data.functions
+          })
+          
+          return author.attrs
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      }, { timing: 5000 })
 
       this.get('user/billing', () => {
 

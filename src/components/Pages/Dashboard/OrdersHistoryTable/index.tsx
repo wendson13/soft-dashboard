@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
 import { BiDownArrowAlt, BiUpArrowAlt } from 'react-icons/bi';
 import styled, { useTheme } from 'styled-components';
 import { calcPercentageDifference } from '../../../../pages/Dashboard';
-import { api } from '../../../../services/api';
 import { BoxShadow } from '../../../Styles/Containers';
 
 type Order = {
@@ -28,7 +26,7 @@ export function OrdersHistoryTable ({ orders } : OrdersHistoryTableProps) {
   return (
     <BoxShadow style={{ gap: '2rem' }}>
       <TitleBox>
-        <strong>Orders History</strong>
+        <h2>Orders History</h2>
         <span>
           {
             ordersDifferentPercentage > 0
@@ -74,7 +72,7 @@ const TitleBox = styled.div`
   flex-direction: column;
   gap: .5rem;
 
-  strong {
+  h2 {
     font-size: 1.5rem;
     font-weight: 700;
     color: ${({theme}) => theme.colors.dark};

@@ -20,6 +20,7 @@ export function Spinner ({ size = 10, borderSize = 1.5 }: SpinnerProps) {
 }
 
 const Container = styled.div`
+  min-height: 100vh;
   width: 100%;
   min-height: 100vh;
   display: flex;
