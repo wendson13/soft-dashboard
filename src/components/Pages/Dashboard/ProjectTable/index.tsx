@@ -218,7 +218,7 @@ const TableRowBody = styled.tr<TableRowBodyProps>`
 
     &:first-child {
       width: 40%;
-      padding-left: 1rem;
+      padding: 0 1rem;
       color: ${({theme}) => theme.colors.dark}
     }
 

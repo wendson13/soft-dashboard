@@ -26,6 +26,19 @@ type Author = {
   functions: string;
 }
 
+type BillingsInfo = {
+  name: string;
+  company: string;
+  email: string;
+  vatNumber: string;
+}
+
+type PaymentMethod = {
+  id: string;
+  flag: string;
+  cardNumber: string;
+}
+
 export function makeServer({ environment = "test" } = {}) {
   
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
@@ -36,6 +49,8 @@ export function makeServer({ environment = "test" } = {}) {
     models: {
       project: Model.extend<Partial<Project>>({}),
       author: Model.extend<Partial<Author>>({}),
+      billingsInfo: Model.extend<Partial<BillingsInfo>>({}),
+      paymentMethod: Model.extend<Partial<PaymentMethod>>({}),
     },
 
     factories: {
@@ -144,12 +159,53 @@ export function makeServer({ environment = "test" } = {}) {
 
           return functionsType[Math.ceil(Math.random() * 4)]
         }
+      }),
+
+      billingsInfo: Factory.extend({
+        
+        id() {
+          return faker.datatype.uuid();
+        },
+
+        name() {
+          return faker.name.findName();
+        },
+
+        company() {
+          return faker.company.companyName();
+        },
+        
+        email() {
+          return faker.internet.email();
+        },
+
+        vatNumber() {
+          return `FRB-${faker.finance.bic()}`
+        }
+      }),
+
+      paymentMethod: Factory.extend({
+        id() {
+          return faker.datatype.uuid();
+        },
+
+        flag() {
+          const flags = ['visa', 'mastercard'];
+
+          return flags[Math.round(Math.random() * flags.length)];
+        },
+
+        cardNumber() {
+          return `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999})}`;
+        }
       })
     },
 
     seeds(server) {
       server.createList('project', 50);
       server.createList('author', 5);
+      server.createList('billingsInfo', 10);
+      server.createList('paymentMethod', 2);
     },
 
     routes() {
@@ -302,25 +358,12 @@ export function makeServer({ environment = "test" } = {}) {
         }
       }, { timing: 5000 })
 
-      this.get('user/billing', () => {
-
-        const flags = ['visa', 'mastercard'];
-
-        const paymentMethods = [
-          {
-            id: 1,
-            flag: flags[Math.round(Math.random() * flags.length)],
-            numberCard: `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999})}`
-          },
-          {
-            id: 2,
-            flag: flags[Math.round(Math.random() * flags.length)],
-            numberCard: `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999})}`
-          }
-        ]
+      this.get('user/billing', (schema, _) => {
+        const billingsInfo = schema.all('billingsInfo').models as BillingsInfo[];
+        const paymentMethods = schema.all('paymentMethod').models as PaymentMethod[];
 
         const getRandomTransactionInfo = () => {
-          const randomAmount = faker.datatype.number({ min: -10000, max: 100000})
+          const randomAmount = faker.datatype.number({ min: -100000, max: 100000})
           
           const randomType = randomAmount === 0 ? 'pending'
           : randomAmount > 0 ? 'deposit' : 'withdraw'
@@ -332,6 +375,8 @@ export function makeServer({ environment = "test" } = {}) {
           }
         }
 
+        const flags = ['visa', 'mastercard'];
+
         return {
           salary:  faker.datatype.number({ min: 1000, max: 60000}),
           paypal: faker.datatype.number({ min: 1000, max: 80000}),
@@ -339,7 +384,7 @@ export function makeServer({ environment = "test" } = {}) {
           cardHolder: {
             flag: flags[Math.round(Math.random() * flags.length)],
             name: faker.name.findName(),
-            numberCard: faker.finance.creditCardNumber(),
+            cardNumber: faker.finance.creditCardNumber('#### #### #### ####'),
             expires: faker.date.future(5),
           },
 
@@ -355,23 +400,13 @@ export function makeServer({ environment = "test" } = {}) {
             })
           ),
 
-          billingsInfo : (
-            Array.from({ length: 5}).map(() => {
-              const name = faker.name.findName();
-
-              return {
-                name,
-                company: faker.company.companyName(),
-                email: faker.internet.email(name),
-                vatNumber: `FRB-${faker.finance.bic()}`
-              }
-            })
-          ),
+          billingsInfo,
 
           transactions : {
             newest: (
-              Array.from({ length: 2}).map(() => {
+              Array.from({ length: 2}).map((_, index) => {
                 return {
+                  id: faker.datatype.uuid() + index,
                   title: faker.company.companyName(),
                   info: getRandomTransactionInfo()
                 }
@@ -379,14 +414,111 @@ export function makeServer({ environment = "test" } = {}) {
             ),
 
             yesterday: (
-              Array.from({ length: 4}).map(() => {
+              Array.from({ length: 4}).map((_, index) => {
                 return {
+                  id: faker.datatype.uuid() + index,
                   title: faker.company.companyName(),
                   info: getRandomTransactionInfo()
                 }
               })
             )
           }
+        }
+      })
+
+      this.put('user/billing/info/:id', (schema, req) => {
+        const id = req.params.id;
+        const data: Partial<BillingsInfo>  = JSON.parse(req.requestBody)
+
+        const info = schema.findBy('billingsInfo', {
+          id: id
+        })
+
+        if(info){
+          info.update({
+            name: data.name,
+            company: data.company,
+            email: data.email
+          })
+          
+          return info.attrs
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      })
+
+      this.delete('user/billing/info/:id', (schema, req) => {
+        const id = req.params.id;
+
+        const info = schema.findBy('billingsInfo', {
+          id: id
+        })
+
+        if(info){
+          info.destroy()
+
+          return new Response(200, {}, {});
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' });
+        }
+      })
+
+      this.put('user/payment-method/:id', (schema, req) => {
+        const id = req.params.id;
+        const data: Partial<PaymentMethod>  = JSON.parse(req.requestBody)
+
+        const payment = schema.findBy('paymentMethod', {
+          id: id
+        })
+
+        if(payment && data.cardNumber && data.flag){
+          payment.update({
+            cardNumber: `**** **** **** ${data.cardNumber.slice(-4)}`,
+            flag: data.flag,
+          })
+          
+          return payment.attrs
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      })
+
+      this.post('user/payment-method', (schema, req) => {
+
+        const data: Partial<PaymentMethod>  = JSON.parse(req.requestBody)
+        
+        if(data.cardNumber && data.flag){
+          
+          const payment = schema.create('paymentMethod', {
+            id: faker.datatype.uuid(),
+            cardNumber: `**** **** **** ${data.cardNumber.slice(-4)}`,
+            flag: data.flag
+          })
+          
+          return payment.attrs
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      }, { timing: 5000 })
+
+      this.delete('user/payment-method/:id', (schema, req) => {
+        const id = req.params.id;
+
+        const payment = schema.findBy('paymentMethod', {
+          id: id
+        })
+
+        if(payment){
+          payment.destroy()
+
+          return new Response(200, {}, {});
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' });
         }
       })
 
