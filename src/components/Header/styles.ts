@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+type ThemeType = {
+  themeType: 'light' | 'dark'
+}
+
 export const Container = styled.header`
   min-height: 7rem;
   display: flex;
@@ -8,25 +12,25 @@ export const Container = styled.header`
   padding: 0 3rem;
 `;
 
-export const Title = styled.div`
+export const Title = styled.div<ThemeType>`
   display: flex;
   flex-direction: column;
   gap: .5rem;
 
   div {
     font-size: 1.25rem;
-    color: ${({theme}) => theme.colors.gray7};
+    color: ${({theme, themeType }) => themeType === 'light' ? theme.colors.gray7 : theme.colors.gray5};
     
     span {
       font-size: 1.25rem;
-      color: ${({theme}) => theme.colors.dark};
+      color: ${({theme, themeType}) => themeType === 'light' ? theme.colors.dark : theme.colors.gray1};
     }
   }
 
-  strong {
+  h1 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: ${({theme}) => theme.colors.dark};
+    color: ${({theme , themeType}) => themeType === 'light' ? theme.colors.dark : theme.colors.gray1};
   }
 `;
 
@@ -36,13 +40,13 @@ export const Menu = styled.div`
   align-items: center;
 `;
 
-export const Search = styled.div`
+export const Search = styled.div<ThemeType>`
   display: flex;
   align-items: center;
   gap: .5rem;
   padding: .75rem 1rem;
   border-radius: .5rem;
-  border: .2rem solid ${({theme}) => theme.colors.gray5};
+  border: .2rem solid ${({theme, themeType}) => themeType === 'light' ? theme.colors.gray5 : theme.colors.gray1};
 
   svg {
     cursor: pointer;
@@ -52,19 +56,19 @@ export const Search = styled.div`
     font-size: 1rem;
     border: 0;
     outline: none;
-    color: ${({theme}) => theme.colors.dark};
+    color: ${({theme, themeType}) => themeType === 'light' ? theme.colors.dark: theme.colors.gray1};
     background: transparent;
   }
 `;
 
-export const SignIn = styled.button`
+export const SignIn = styled.button<ThemeType>`
   display: flex;
   align-items: center;
   border: 0;
   gap: .5rem;
   font-size: 1.25rem;
   font-weight: 500;
-  color: ${({theme}) => theme.colors.gray8};
+  color: ${({theme, themeType}) => themeType === 'light' ? theme.colors.gray8 : theme.colors.gray1};
   background: transparent;
 `;
 
@@ -98,7 +102,7 @@ export const NotificationsContent = styled.div`
   outline: none;
 
   border: 0;
-  box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray5};
+  box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray5 };
   background: ${({theme}) => theme.colors.gray1};
 
   &.ReactModal__Content--after-open{

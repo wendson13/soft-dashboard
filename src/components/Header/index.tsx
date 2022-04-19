@@ -21,11 +21,16 @@ type NotificationsType = {
   total: number;
 }
 
-export function Header () {
+type HeaderProps = {
+  themeType?: 'dark' | 'light';
+}
+
+export function Header ({ themeType = 'light' }: HeaderProps) {
 
   const { colors } = useTheme();
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [data, setData] = useState<NotificationsType>();
+  const color = themeType === 'light' ? colors.gray8 : colors.gray1;
 
   useEffect(() => {
     api.get<NotificationsType>('user/notification').then(({data}) => {
@@ -79,28 +84,28 @@ export function Header () {
 
   return (
     <Container>
-      <Title>
+      <Title themeType={themeType}>
         <div>Pages / <span>Dashboard</span></div>
-        <strong>Dashboard</strong>
+        <h1>Dashboard</h1>
       </Title>
 
       <Menu>
-        <Search>
-          <FaSearch size={20} color={colors.gray8} />
+        <Search themeType={themeType}>
+          <FaSearch size={20} color={color} />
           <input type='search' placeholder='Type here...' />
         </Search>
         
-        <SignIn>
-          <FaUserCircle size={28} color={colors.gray8}/>
+        <SignIn themeType={themeType}>
+          <FaUserCircle size={28} color={color}/>
           sign In
         </SignIn>
         
         <Settings>
-          <IoSettingsSharp size={26} color={colors.gray8} />
+          <IoSettingsSharp size={26} color={color} />
         </Settings>
 
         <NotificationButton onClick={() => setIsOpenNotification(!isOpenNotification)}>
-          <IoNotifications size={26} color={colors.gray8}/>
+          <IoNotifications size={26} color={color}/>
         </NotificationButton>
 
       </Menu>
@@ -158,7 +163,7 @@ export function Header () {
                     </strong>
 
                     <span>
-                      <MdWatchLater size={24} color={colors.gray8}/>
+                      <MdWatchLater size={24} color={colors.gray7} />
                       {
                         timeSince(new Date(notification.date))
                       }

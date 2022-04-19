@@ -1,5 +1,6 @@
 import { BsFillCalendar2Fill } from 'react-icons/bs';
 import styled, { useTheme } from 'styled-components';
+import { BoxShadow } from '../../../Styles/Containers';
 import { TransactionCard } from './TransactionCard';
 
 type Transaction = {
@@ -24,9 +25,9 @@ export function Transactions ( { transactions } : TransactionsProps) {
   const { colors }  = useTheme();
 
   return (
-    <Container>
+    <BoxShadow style={{ width: '70%', gap: '2rem' }}>
       <TitleBox>
-        <strong>Your Transactions</strong>
+        <h2>Your Transactions</h2>
 
         <span>
           <BsFillCalendar2Fill size={24} color={colors.gray8}/>
@@ -47,7 +48,7 @@ export function Transactions ( { transactions } : TransactionsProps) {
       </TitleBox>
 
       <TransactionBox>
-        <strong>NEWEST</strong>
+        <h3>NEWEST</h3>
 
         {
           transactions.newest.map(transaction => {
@@ -64,12 +65,13 @@ export function Transactions ( { transactions } : TransactionsProps) {
       </TransactionBox>
 
       <TransactionBox>
-        <strong>YESTERDAY</strong>
+        <h3>YESTERDAY</h3>
 
         {
           transactions.yesterday.map(transaction => {
             return (
               <TransactionCard 
+                key={transaction.id}
                 title={transaction.title}
                 info={transaction.info}
               />
@@ -78,29 +80,16 @@ export function Transactions ( { transactions } : TransactionsProps) {
         }
 
       </TransactionBox>
-    </Container>
+    </BoxShadow>
   );
 }
-
-const Container = styled.div`
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 1.5rem;
-  gap: 2rem;
-  border-radius: 1rem;
-  box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray6};
-  background: ${({theme}) => theme.colors.gray1};
-`;
 
 const TitleBox = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
 
-  strong {
+  h2 {
     font-size: 1.5rem;
     font-weight: 700;
   }
@@ -121,7 +110,7 @@ const TransactionBox = styled.div`
   align-items: flex-start;
   gap: 2rem;
 
-  > strong {
+  > h3 {
     font-size: 1.1rem;
     color: ${({theme}) => theme.colors.gray8};
   }

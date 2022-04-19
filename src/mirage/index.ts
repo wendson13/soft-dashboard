@@ -19,11 +19,13 @@ type Project = {
 type Author = {
   id: string;
   name: string;
+  description: string;
   email: string;
   imageUrl: string;
   status: string;
   employed: string;
   functions: string;
+  projectCover: string[];
 }
 
 type BillingsInfo = {
@@ -39,6 +41,43 @@ type PaymentMethod = {
   cardNumber: string;
 }
 
+type UserSetting = {
+  account: {
+    follows: boolean;
+    answers: boolean;
+    mentions: boolean;
+  };
+
+  application: {
+    projects: boolean;
+    products: boolean;
+    newsletter: boolean;
+  }
+}
+
+type Social = {
+  imageUrl: string;
+  link: string;
+}
+
+type UserInfo = {
+  imageUrl: string;
+  name: string;
+  function: string;
+  about: string;
+  mobile: string;
+  email: string;
+  location: string;
+  social: Social[];
+}
+
+type Conversation = {
+  id: string;
+  imageUrl: string;
+  name: string;
+  message: string;
+}
+
 export function makeServer({ environment = "test" } = {}) {
   
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
@@ -51,12 +90,25 @@ export function makeServer({ environment = "test" } = {}) {
       author: Model.extend<Partial<Author>>({}),
       billingsInfo: Model.extend<Partial<BillingsInfo>>({}),
       paymentMethod: Model.extend<Partial<PaymentMethod>>({}),
+      userSetting: Model.extend<Partial<UserSetting>>({}),
+      userInfo: Model.extend<Partial<UserInfo>>({}),
+      conversation: Model.extend<Partial<Conversation>>({}),
     },
 
     factories: {
       project: Factory.extend({
         id() {
           return faker.datatype.uuid();
+        },
+
+        projectCover() {
+          const imageUrl = ['https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80', 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80']
+
+          return imageUrl[Math.round(Math.random() * 2)]
+        },
+
+        description() {
+          return faker.lorem.paragraph()
         },
 
         name() {
@@ -69,7 +121,7 @@ export function makeServer({ environment = "test" } = {}) {
 
         members() {
           return (
-            Array.from({ length: 6}).map(() => (
+            Array.from({ length: 4}).map(() => (
                 {
                   email: faker.internet.email(),
                   imageUrl: 'https://github.com/wendson13.png',
@@ -198,6 +250,25 @@ export function makeServer({ environment = "test" } = {}) {
         cardNumber() {
           return `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999})}`;
         }
+      }),
+
+      conversation: Factory.extend({
+
+        id() {
+          return faker.datatype.uuid();
+        },
+
+        imageUrl() {
+          return 'https://github.com/wendson13.png';
+        },
+
+        name() {
+          return faker.name.findName();
+        },
+
+        message() {
+          return faker.lorem.sentence();
+        }
       })
     },
 
@@ -206,6 +277,35 @@ export function makeServer({ environment = "test" } = {}) {
       server.createList('author', 5);
       server.createList('billingsInfo', 10);
       server.createList('paymentMethod', 2);
+      server.create('userSetting', {
+        account: {
+          follows: false,
+          answers: false,
+          mentions: false,
+        },
+
+        application: {
+          projects: false,
+          products: false,
+          newsletter: false,
+        }
+      });
+      server.create('userInfo', {
+        imageUrl: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+        name: faker.name.findName(),
+        function: faker.name.jobTitle(),
+        about: faker.lorem.paragraph(),
+        mobile: faker.phone.phoneNumber('(##) ### #### ####'),
+        email: faker.internet.email(),
+        location: faker.address.country(),
+        social: Array.from({ length: Math.ceil(Math.random() * 2)}).map(() => {
+          return {
+            imageUrl: 'https://github.com/wendson13.png',
+            link: 'https://github.com/wendson13'
+          };
+        })
+      });
+      server.createList('conversation', 10);
     },
 
     routes() {
@@ -522,14 +622,49 @@ export function makeServer({ environment = "test" } = {}) {
         }
       })
 
-      this.get('user/profile', () => {
-        return {
-          userInfo: {
-            imageUrl: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            name: faker.name.findName(),
-            function: faker.name.jobTitle()
-          }
+      this.get('user/profile', (schema, _) => {
+        const userInfo = schema.first('userInfo');
+        const settings = schema.first('userSetting');
+        const conversations = schema.all('conversation').models as Conversation[];
 
+
+        return {
+          userInfo,
+          settings,
+          conversations
+        }
+      })
+
+      this.put('user/profile-about', (schema, req) => {
+        const userInfo = schema.first('userInfo');
+        const data: Partial<UserInfo>  = JSON.parse(req.requestBody)
+
+        if(data && userInfo){
+          userInfo.update({
+            about: data.about
+          })
+
+          return new Response(200);
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
+        }
+      })
+
+      this.put('user/notifications-settings', (schema, req) => {
+
+        const data: Partial<UserSetting>  = JSON.parse(req.requestBody)
+        const settings = schema.first('userSetting')
+        
+        if(data.account && data.application && settings){
+          settings.update({
+            ...data,
+          })
+
+          return new Response(200)
+        }
+        else {
+          return new Response(404, {}, { error: 'Not Found' })
         }
       })
     },

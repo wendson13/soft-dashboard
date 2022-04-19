@@ -31,7 +31,7 @@ const Container = styled.footer`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4rem;
+  padding: 2rem 4rem;
 
   > span {
     display: flex;
