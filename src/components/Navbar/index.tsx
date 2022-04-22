@@ -1,5 +1,5 @@
 import { AiFillShop } from 'react-icons/ai';
-import { FaBuilding, FaCreditCard, FaTools, FaUserAlt } from 'react-icons/fa';
+import { FaBuilding, FaCreditCard, FaUserAlt } from 'react-icons/fa';
 import { BsFileTextFill } from 'react-icons/bs';
 import { IoRocketSharp } from 'react-icons/io5';
 import { ActiveLink } from './ActiveLink';
@@ -25,7 +25,6 @@ export function Navbar () {
         <ActiveLink path='/' isActive={pathActive} Icon={AiFillShop}>Dashboard</ActiveLink>
         <ActiveLink path='/tables' isActive={pathActive} Icon={FaBuilding}>Tables</ActiveLink>
         <ActiveLink path='/billing' isActive={pathActive} Icon={FaCreditCard}>Billing</ActiveLink>
-        <ActiveLink path='/settings' isActive={pathActive} Icon={FaTools}>Settings</ActiveLink>
 
         <strong>ACCOUNT PAGES</strong>
 

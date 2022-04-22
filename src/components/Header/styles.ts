@@ -37,6 +37,7 @@ export const Title = styled.div<ThemeType>`
 export const Menu = styled.div`
   display: flex;
   gap: 1rem;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -73,6 +74,8 @@ export const SignIn = styled.button<ThemeType>`
 `;
 
 export const Settings = styled.button`
+  display: flex;
+  align-items: center;
   border: 0;
   background: transparent;
 `;
@@ -83,6 +86,8 @@ export const Notifications = styled.div`
 `;
 
 export const NotificationButton = styled.button`
+  display: flex;
+  align-items: center;
   background: transparent;
   border: 0;
   z-index: 1;

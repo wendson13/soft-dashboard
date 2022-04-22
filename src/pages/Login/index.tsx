@@ -11,7 +11,7 @@ import { Switch } from '../../components/Switch';
 import { useAuth } from '../../hooks/useAuth';
 import { Container, Content, Header, RememberBox, SubmitBox, TitleBox } from './styles';
 
-export function SignIn () {
+export function Login () {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +28,7 @@ export function SignIn () {
     setLoading(true);
 
     if(!user){
-      await signIn({email, password});
+      await signIn({email, password, remember: isRemember});
     }
 
     setLoading(false);

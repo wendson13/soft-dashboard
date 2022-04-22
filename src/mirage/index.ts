@@ -694,28 +694,26 @@ export function makeServer({ environment = "test" } = {}) {
         }
       })
 
-      this.post('login', (schema, req) => {
+      this.post('/login', (schema, req) => {
         const data = JSON.parse(req.requestBody) as Partial<UserModelType>
 
-        const user: UserModelType | null = schema.findBy('user', {
+        const user = schema.findBy('user', {
           email: data.email,
           password: data.password
-        })
+        })?.attrs
 
         if(user && user.id){
 
-          return new Response(200, {}, {
-            user: {
-              id: user.id
-            }
-          })
+          return {
+            id: user.id
+          }
         }
         else{
           return new Response(404, {}, { error: 'User or password incorrect' });
         }
       })
 
-      this.put('register', (schema, req) => {
+      this.put('/register', (schema, req) => {
 
         const data : Partial<UserModelType>  = JSON.parse(req.requestBody)
 
@@ -736,9 +734,7 @@ export function makeServer({ environment = "test" } = {}) {
           }).attrs
 
           return {
-            user: {
-              id: user.id
-            }
+            id: user.id
           }
         }
         else {

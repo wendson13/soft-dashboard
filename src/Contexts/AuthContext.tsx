@@ -1,15 +1,19 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
 type UserSignProps = {
-  email: string,
-  password: string
+  email: string;
+  password: string;
+  remember?: boolean;
 }
 
 type AuthContextType = {
-  user: User | undefined,
-  signIn: (login: UserSignProps) => Promise<void>
-  signUp: (login: UserSignProps) => Promise<void>
+  user: User | null,
+  signIn: (login: UserSignProps) => Promise<void>;
+  signUp: (login: UserSignProps) => Promise<void>;
+  signOut: () => void;
+  loading: boolean;
 }
 
 type AuthContextProviderProps = {
@@ -17,25 +21,48 @@ type AuthContextProviderProps = {
 }
 
 type User = {
-  user: {
-    id: string;
-  }
+  id: string;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = (props : AuthContextProviderProps) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigate();
 
-  const signIn = async ({ email, password }: UserSignProps) => {
+  const getUserStorage = async () => {
+    const storageJson = localStorage.getItem('soft-dashboard@user')
+
+    return storageJson ? await JSON.parse(storageJson) as User : null;
+  }
+
+  useEffect(() => {
+    
+    getUserStorage().then(user => {
+      if(user){
+        setUser(user);
+      }
+
+      setLoading(false);
+    })
+  }, [])
+
+  const signIn = async ({ email, password, remember }: UserSignProps) => {
     try {
       const { data } = await api.post<User>('login', {
         email, password
       })
 
-      if(data.user){
+      console.log(data)
+
+      if(data.id){
+        if(remember){
+          localStorage.setItem('soft-dashboard@user', JSON.stringify(data))
+        }
+
         setUser({
-          user: data.user
+          id: data.id
         })  
       }
 
@@ -50,9 +77,9 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
         email, password
       })
 
-      if(data.user){
+      if(data.id){
         setUser({
-          user: data.user,
+          id: data.id,
         })  
       }
     } catch (error) {
@@ -60,8 +87,15 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
     }
   }
 
+  const signOut = () => {
+    localStorage.removeItem('soft-dashboard@user');
+    setUser(null);
+    
+    navigation('/login');
+  }
+
   return (
-    <AuthContext.Provider value={{ user, signIn, signUp }}>
+    <AuthContext.Provider value={{ user, signIn, signUp, signOut, loading }}>
       {props.children}
     </AuthContext.Provider>
     )

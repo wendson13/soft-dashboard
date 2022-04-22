@@ -2,8 +2,12 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export function PrivateRoute (){
-  let auth = useAuth();
-  let location = useLocation();
+  const auth = useAuth();
+  const location = useLocation();
+
+  if(auth.loading){
+    return <div />
+  }
   
   if (!auth.user && location.pathname !== '/register') {
     return <Navigate to="/login" state={{ from: location }} />;

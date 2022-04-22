@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { AiFillShop } from 'react-icons/ai';
 import { BsCheckSquare, BsFileTextFill, BsFillCheckSquareFill } from 'react-icons/bs';
 import { FaUserAlt } from 'react-icons/fa';
@@ -8,9 +8,9 @@ import { useTheme } from 'styled-components';
 import { LoggedOutFooter } from '../../components/Footer/LoggedOutFooter';
 import { Spinner } from '../../components/Loading';
 import { useAuth } from '../../hooks/useAuth';
-import { BackgroundImage, Container, Header, SubmitBox } from './styles';
+import { BackgroundImage, Container, Header, SubmitBox, SwitchBox } from './styles';
 
-export function SignUp () {
+export function Register () {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,12 +19,17 @@ export function SignUp () {
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
   const { colors } = useTheme();
-  const navigation = useNavigate()
+  const [termsIsAccept, setTermsIsAccept] = useState(true);
+  const navigation = useNavigate();
 
   const handleUserRegister = async (event: FormEvent) => {
     event.preventDefault();
 
-    if(!email.trim() || !password.trim()) return;
+    if(!isChecked){
+      setTermsIsAccept(false);
+    }
+    
+    if(!email.trim() || !password.trim() || !isChecked) return;
 
     setLoading(true);
 
@@ -90,19 +95,23 @@ export function SignUp () {
               onChange={e => setPassword(e.target.value.trim())}
             />
 
-            <div>
+            <SwitchBox
+              isAccept={termsIsAccept}
+            >
               <button
                 onClick={() => setIsChecked(!isChecked)}
+                type='button'
               >
                 {
                   isChecked ?  
                     <BsFillCheckSquareFill size={24} color={colors.dark} />
                     :
-                    <BsCheckSquare size={24} color={colors.dark} />
+                    <BsCheckSquare size={24} color={termsIsAccept ? colors.dark : colors.danger} />
                 }
               </button>
+
               <span>I agree the <Link to=''>Terms and Conditions</Link></span>
-            </div>
+            </SwitchBox>
 
             <SubmitBox>
               { 

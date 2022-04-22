@@ -86,29 +86,6 @@ export const Container = styled.main`
         }
       }
 
-      > div {
-        display: flex; 
-        align-items: center;
-        gap: .5rem;
-
-        button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 0;
-          background: transparent;
-          border-radius: .25rem;
-        }
-
-        span {
-          color: ${({theme}) => theme.colors.dark};
-
-          a {
-            font-weight: 700;
-          }
-        }
-      }
-
       > button {
         font-weight: 700;
         padding: 1rem;
@@ -131,18 +108,48 @@ export const Container = styled.main`
   }
 `;
 
+type SwitchBoxType = {
+  isAccept: boolean;
+}
+
+export const SwitchBox = styled.div<SwitchBoxType>`
+  display: flex; 
+  align-items: center;
+  gap: .5rem;
+  border-radius: .25rem;
+  padding: ${({isAccept}) => isAccept ? '' : '.25rem'};
+  outline: .2rem solid ${({theme, isAccept}) => isAccept ? 'none' : theme.colors.danger};
+
+  span {
+    color: ${({theme, isAccept}) => isAccept ? theme.colors.dark : theme.colors.danger};
+
+    a {
+      font-weight: 700;
+    }
+  }
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    background: transparent;
+    border-radius: .25rem;
+  }
+`;
+
 export const SubmitBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   
   > button {
-      width: 100%;
-      font-weight: 500;
-      padding: .5rem 1rem;
-      border-radius: .5rem;
-      border: 0;
-      color: ${({theme}) => theme.colors.gray1};
-      background: ${({theme}) => theme.gradients.info};
-    }
+    width: 100%;
+    font-weight: 500;
+    padding: 1rem;
+    border-radius: .5rem;
+    border: 0;
+    color: ${({theme}) => theme.colors.gray1};
+    background: ${({theme}) => theme.gradients.dark};
+  }
 `;

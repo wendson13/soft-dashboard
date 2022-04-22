@@ -7,6 +7,7 @@ import { Container, Menu, NotificationButton, NotificationsContent, Search, Sett
 import ReactModal from 'react-modal';
 import { api } from '../../services/api';
 import { Spinner } from '../Loading';
+import { useAuth } from '../../hooks/useAuth';
 
 type NotificationType = {
   id: number;
@@ -31,6 +32,7 @@ export function Header ({ themeType = 'light' }: HeaderProps) {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [data, setData] = useState<NotificationsType>();
   const color = themeType === 'light' ? colors.gray8 : colors.gray1;
+  const { signOut } = useAuth();
 
   useEffect(() => {
     api.get<NotificationsType>('user/notification').then(({data}) => {
@@ -95,9 +97,11 @@ export function Header ({ themeType = 'light' }: HeaderProps) {
           <input type='search' placeholder='Type here...' />
         </Search>
         
-        <SignIn themeType={themeType}>
-          <FaUserCircle size={28} color={color}/>
-          sign In
+        <SignIn themeType={themeType}
+          onClick={signOut}
+        >
+          <FaUserCircle size={26} color={color}/>
+          sign out
         </SignIn>
         
         <Settings>
