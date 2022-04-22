@@ -63,7 +63,7 @@ export function Tables () {
   }
 
   const getUserList = async (controller: AbortController) => {
-    const { data } = await api.get<User[]>('user/members', { signal: controller.signal });
+    const { data } = await api.get<User[]>('user/authors', { signal: controller.signal });
     
     setUsersList(data);
   }

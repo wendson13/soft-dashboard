@@ -14,10 +14,10 @@ if (import.meta.env.DEV) {
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <App />
-      </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <App />
+        </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

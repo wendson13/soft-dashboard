@@ -78,6 +78,12 @@ type Conversation = {
   message: string;
 }
 
+type UserModelType = {
+  id: string;
+  email: string;
+  password: string;
+}
+
 export function makeServer({ environment = "test" } = {}) {
   
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
@@ -93,6 +99,7 @@ export function makeServer({ environment = "test" } = {}) {
       userSetting: Model.extend<Partial<UserSetting>>({}),
       userInfo: Model.extend<Partial<UserInfo>>({}),
       conversation: Model.extend<Partial<Conversation>>({}),
+      user: Model.extend<Partial<UserModelType>>({}),
     },
 
     factories: {
@@ -269,6 +276,20 @@ export function makeServer({ environment = "test" } = {}) {
         message() {
           return faker.lorem.sentence();
         }
+      }),
+
+      user: Factory.extend({
+        id(){
+          return faker.datatype.uuid();
+        },
+
+        email() {
+          return faker.internet.email();
+        },
+
+        password(i){
+          return `${i}admin`
+        }
       })
     },
 
@@ -306,6 +327,11 @@ export function makeServer({ environment = "test" } = {}) {
         })
       });
       server.createList('conversation', 10);
+      server.createList('user', 5, {
+        email: 'admin@email.com',
+        password: '321admin',
+        id: faker.datatype.uuid()
+      });
     },
 
     routes() {
@@ -665,6 +691,58 @@ export function makeServer({ environment = "test" } = {}) {
         }
         else {
           return new Response(404, {}, { error: 'Not Found' })
+        }
+      })
+
+      this.post('login', (schema, req) => {
+        const data = JSON.parse(req.requestBody) as Partial<UserModelType>
+
+        const user: UserModelType | null = schema.findBy('user', {
+          email: data.email,
+          password: data.password
+        })
+
+        if(user && user.id){
+
+          return new Response(200, {}, {
+            user: {
+              id: user.id
+            }
+          })
+        }
+        else{
+          return new Response(404, {}, { error: 'User or password incorrect' });
+        }
+      })
+
+      this.put('register', (schema, req) => {
+
+        const data : Partial<UserModelType>  = JSON.parse(req.requestBody)
+
+        if(data && data.email && data.password){
+          const exist = schema.findBy('user', {
+            email: data.email
+          })
+
+          if(exist){
+            return new Response(409, {}, { error: 'This email is already registered' });
+          }
+
+
+          const user: UserModelType = schema.create('user', {
+            id: faker.datatype.uuid(),
+            email: data.email,
+            password: data.password,
+          }).attrs
+
+          return {
+            user: {
+              id: user.id
+            }
+          }
+        }
+        else {
+          return new Response(500, {}, { error: 'Unexpected Error' });
         }
       })
     },

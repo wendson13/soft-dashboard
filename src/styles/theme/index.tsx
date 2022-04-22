@@ -28,11 +28,11 @@ const theme: DefaultTheme = {
   gradients: {
     primary: 'linear-gradient(300deg, #7928CA, #FF0080)',
     secondary: 'linear-gradient(300deg, #A8B8D8, #627594)',
-    info: 'linear-gradient(300deg, #21d4fd, #2152ff)',
+    info: 'linear-gradient(350deg, #2152ff, #21d4fd)',
     success: 'linear-gradient(300deg, #98EC2D, #17AD37)',
     warning: 'linear-gradient(300deg, #FBCF33, #F53939)',
     danger: 'linear-gradient(300deg, #FF667C, #EA0606)',
-    dark: 'linear-gradient(300deg, #3A416F, #141727)',
+    dark: 'linear-gradient(350deg, #141727, #3A416F)',
     light: 'linear-gradient(300deg, #EBEFF4, #CED4DA)',
   },
 
