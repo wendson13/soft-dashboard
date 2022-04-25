@@ -3,7 +3,7 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import { IoSettingsSharp, IoNotifications } from 'react-icons/io5';
 import { MdWatchLater } from 'react-icons/md';
 import { useTheme } from 'styled-components';
-import { Container, Menu, NotificationButton, NotificationsContent, Search, Settings, SignIn, Title } from './styles';
+import { Container, Menu, NotificationButton, NotificationsContent, Search, SignIn, Title } from './styles';
 import ReactModal from 'react-modal';
 import { api } from '../../services/api';
 import { Spinner } from '../Loading';
@@ -103,10 +103,6 @@ export function Header ({ themeType = 'light' }: HeaderProps) {
           <FaUserCircle size={26} color={color}/>
           sign out
         </SignIn>
-        
-        <Settings>
-          <IoSettingsSharp size={26} color={color} />
-        </Settings>
 
         <NotificationButton onClick={() => setIsOpenNotification(!isOpenNotification)}>
           <IoNotifications size={26} color={color}/>

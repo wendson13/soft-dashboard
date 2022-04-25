@@ -94,11 +94,12 @@ export function ChartUserActive ({ projectInfo }: ChartUserActiveProps) {
   }
   
   return (
-    <BoxShadow style={{ width: '45%' }} >
+    <BoxShadow>
       <ChartBox>
         <Chart 
           options={options} 
           series={[{ name: 'Users', data: projectInfo.users }]}
+          width={'100%'}
           height={300}
           type='bar'
         />

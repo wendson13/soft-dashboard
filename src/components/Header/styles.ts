@@ -73,13 +73,6 @@ export const SignIn = styled.button<ThemeType>`
   background: transparent;
 `;
 
-export const Settings = styled.button`
-  display: flex;
-  align-items: center;
-  border: 0;
-  background: transparent;
-`;
-
 export const Notifications = styled.div`
   cursor: pointer;
   position: relative;

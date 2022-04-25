@@ -123,7 +123,7 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         imageUrl(){
-          return 'https://github.com/wendson13.png';
+          return './logo-short.svg';
         },
 
         members() {

@@ -20,7 +20,7 @@ export function ActiveLink ({ children, Icon, isActive, path } : ActiveLinkProps
        <Icon size={20} color={isActive === path ? colors.gray1 : colors.dark} />
       </div>
 
-      {children}
+      <span>{children}</span>
     </Container>
   );
 }
@@ -63,6 +63,13 @@ const Container = styled(Link)`
     > div {
       background: ${({theme}) => theme.colors.primary};
       box-shadow: none;
+    }
+  }
+
+
+  @media screen and (max-width: 1400px) {
+    span {
+      display: none;
     }
   }
 `;

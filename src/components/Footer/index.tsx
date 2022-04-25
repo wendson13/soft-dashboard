@@ -1,15 +1,11 @@
-import { FaHeart } from 'react-icons/fa';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 
 export function Footer () {
-
-  const { colors } = useTheme();
 
   return (
     <Container>
       <span>
         © 2022,
-        <FaHeart color={colors.gray7} />
         by <strong>Wendson Sousa</strong>
       </span>
 

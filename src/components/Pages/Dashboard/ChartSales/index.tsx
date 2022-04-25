@@ -83,7 +83,7 @@ export function ChartSales ({ summaryYear } : ChartSalesProps) {
   }
   
   return (
-    <BoxShadow style={{ width: '53%' }}>
+    <BoxShadow>
       <TitleBox>
         <h2>Sales Overview</h2>
         <span>
@@ -118,7 +118,8 @@ export function ChartSales ({ summaryYear } : ChartSalesProps) {
               data: summaryYear.lastYear.sales,
               color: colors.gray12,
             }
-          ]} 
+          ]}
+          width={'100%'}
           height={410}
           type="area"
         />

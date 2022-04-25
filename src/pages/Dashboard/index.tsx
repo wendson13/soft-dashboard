@@ -323,10 +323,14 @@ export function Dashboard () {
             <h2>Soft Dashboard</h2>
             <p>From colors, cards, typography to complex elements, you will find the full documentation.</p>
           
-            <button>
+            <a 
+              href="https://www.figma.com/community/file/987711789844505789"
+              target={'_blank'}
+              rel='noopener'
+            >
               Read More
               <BsArrowRightShort size={26} />
-            </button>
+            </a>
           </div>
 
           <RocketBox>

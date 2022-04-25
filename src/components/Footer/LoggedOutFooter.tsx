@@ -39,7 +39,7 @@ export function LoggedOutFooter () {
         </a>
       </div>
 
-      <p>Copyright © 2022 soft dashboard by Wendson Sousa</p>
+      <p>Copyright © 2022 by Wendson Sousa</p>
     </Footer>
   );
 }

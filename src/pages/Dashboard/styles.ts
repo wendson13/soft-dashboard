@@ -11,7 +11,7 @@ export const WidgetBox = styled.section`
   align-items: center;
   gap: 1.5rem;
 
-  @media screen and (max-width: 1080px) {
+  @media screen and (max-width: 1400px) {
     grid-template-columns: 1fr 1fr;
   }
 `;
@@ -22,6 +22,10 @@ export const Info = styled.section`
   align-items: center;
   gap: 2rem;
   margin: 2rem 0;
+
+  @media screen and (max-width: 1200px){
+    flex-direction: column;
+  }
 `;
 
 export const Documentation = styled.div`
@@ -49,7 +53,7 @@ export const Documentation = styled.div`
       font-size: 1.75rem;
       color: ${({theme}) => theme.colors.dark};
     }
-    button {
+    a {
       display: flex;
       align-items: center;
       gap: .25rem;
@@ -175,6 +179,23 @@ export const ChartsBox = styled.section`
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
+
+  > div:first-child {
+    width: 45%;
+  }
+
+  > div:last-child {
+    width: 55%;
+  }
+
+  @media screen and (max-width: 1200px){
+    flex-direction: column;
+
+
+    > div:first-child, > div:last-child {
+      width: 100%;
+    }
+  }
 `;
 
 export const TablesBox = styled.section`
@@ -183,4 +204,8 @@ export const TablesBox = styled.section`
   justify-content: space-between;
   gap: 2rem;
   margin: 2rem 0;
+
+  @media screen and (max-width: 1200px){
+    grid-template-columns: 1fr;
+  }
 `;
