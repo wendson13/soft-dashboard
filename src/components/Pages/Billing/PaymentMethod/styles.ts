@@ -9,16 +9,16 @@ export const TitleBox = styled.div`
   h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: ${({theme}) => theme.colors.dark};
+    color: ${({ theme }) => theme.colors.dark};
   }
 
   button {
     padding: 1rem;
     border-radius: 1rem;
-    color: ${({theme}) => theme.colors.gray1};
+    color: ${({ theme }) => theme.colors.gray1};
     border: 0;
-    box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray6};
-    background: ${({theme}) => theme.gradients.dark};
+    box-shadow: .1rem .1rem .5rem ${({ theme }) => theme.colors.gray6};
+    background: ${({ theme }) => theme.gradients.dark};
   }
 `;
 
@@ -37,7 +37,7 @@ export const PaymentInfo = styled.div`
 
   select {
     padding: .5rem;
-    border: .1rem solid ${({theme}) => theme.colors.gray6};
+    border: .1rem solid ${({ theme }) => theme.colors.gray6};
     border-radius: .5rem;
     cursor: pointer;
     background: transparent;
@@ -66,11 +66,11 @@ export const CardNumber = styled.div<CardNumberType>`
 
   input {
     padding: .5rem;
-    border: .1rem solid ${({theme, invalid}) => invalid ? theme.colors.danger : theme.colors.gray6 };
+    border: .1rem solid ${({ theme, invalid }) => invalid ? theme.colors.danger : theme.colors.gray6};
     border-radius: .5rem;
 
     &::placeholder {
-      color: ${({theme, invalid}) => invalid && theme.colors.danger};
+      color: ${({ theme, invalid }) => invalid && theme.colors.danger};
     }
   }
 
@@ -80,114 +80,98 @@ export const CardNumber = styled.div<CardNumberType>`
     left: 0;
     font-size: 1.1rem;
     font-weight: 500;
-    color: ${({theme}) => theme.colors.danger};
+    color: ${({ theme }) => theme.colors.danger};
   }
 `;
 
-export const ModalAddCreditCard = styled.div`
-  width: 40%;
-  position: absolute;
-  box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray6};
-  background: ${({theme}) => theme.colors.gray1};
-  overflow: auto;
-  border-radius: 1rem;
-  outline: none;
-  padding: 2rem;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-left: auto;
-  -webkit-overflow-scrolling: touch;
+export const FormAddCreditCard = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 
-  form {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.dark};
+  }
+
+  label {
     display: flex;
     flex-direction: column;
+    gap: .25rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
     gap: 2rem;
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: ${({theme}) => theme.colors.dark};
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: .25rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    > div {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 2rem;
-
-      > label > input {
-        padding: 1rem;
-        border-radius: .5rem;
-        border: .1rem solid ${({theme}) => theme.colors.gray6};
-        color: ${({theme}) => theme.colors.dark};
-        
-      }
-
-      select {
-        font-size: 1.1rem;
-        padding: 1rem;
-        border-radius: .5rem;
-        border: 0;
-        cursor: pointer;
-      }
-
-      > label > div {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-
-        > input {
-          width: 6rem;
-          gap: 1rem;
-          padding: 1rem;
-          border-radius: .5rem;
-          border: .1rem solid ${({theme}) => theme.colors.gray6};
-          color: ${({theme}) => theme.colors.dark};
-        }
-      }
-
-      label:last-child > input{
-        width: 6rem;
-      }
-    }
 
     > label > input {
       padding: 1rem;
       border-radius: .5rem;
-      border: .1rem solid ${({theme}) => theme.colors.gray6};
-      color: ${({theme}) => theme.colors.dark};
+      border: .1rem solid ${({ theme }) => theme.colors.gray6};
+      color: ${({ theme }) => theme.colors.dark};
+      
     }
 
-    > div:last-child {
-      justify-content: flex-end;
+    select {
+      font-size: 1.1rem;
+      padding: 1rem;
+      border-radius: .5rem;
+      border: 0;
+      cursor: pointer;
+    }
+
+    > label > div {
+      display: flex;
       align-items: center;
+      gap: .5rem;
 
-      button:first-child {
-        font-weight: 500;
+      > input {
+        width: 6rem;
+        gap: 1rem;
         padding: 1rem;
-        border: 0;
-        color: ${({theme}) => theme.colors.dark};
         border-radius: .5rem;
-        background: transparent;
+        border: .1rem solid ${({ theme }) => theme.colors.gray6};
+        color: ${({ theme }) => theme.colors.dark};
       }
+    }
 
-      button:last-child {
-        font-weight: 500;
-        padding: 1rem;
-        color: ${({theme}) => theme.colors.gray1};
-        border: 0;
-        border-radius: .5rem;
-        background: ${({theme}) => theme.gradients.dark};
-      }
+    label:last-child > input{
+      width: 6rem;
+    }
+  }
+
+  > label > input {
+    padding: 1rem;
+    border-radius: .5rem;
+    border: .1rem solid ${({ theme }) => theme.colors.gray6};
+    color: ${({ theme }) => theme.colors.dark};
+  }
+
+  > div:last-child {
+    justify-content: flex-end;
+    align-items: center;
+
+    button:first-child {
+      font-weight: 500;
+      padding: 1rem;
+      border: 0;
+      color: ${({ theme }) => theme.colors.dark};
+      border-radius: .5rem;
+      background: transparent;
+    }
+
+    button:last-child {
+      font-weight: 500;
+      padding: 1rem;
+      color: ${({ theme }) => theme.colors.gray1};
+      border: 0;
+      border-radius: .5rem;
+      background: ${({ theme }) => theme.gradients.dark};
     }
   }
 `;

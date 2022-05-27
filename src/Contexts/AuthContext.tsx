@@ -54,8 +54,6 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
         email, password
       })
 
-      console.log(data)
-
       if(data.id){
         if(remember){
           localStorage.setItem('soft-dashboard@user', JSON.stringify(data))

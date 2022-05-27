@@ -85,7 +85,7 @@ type UserModelType = {
 }
 
 export function makeServer({ environment = "test" } = {}) {
-  
+
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
   let server = createServer({
@@ -122,18 +122,18 @@ export function makeServer({ environment = "test" } = {}) {
           return faker.company.companyName();
         },
 
-        imageUrl(){
+        imageUrl() {
           return './logo-short.svg';
         },
 
         members() {
           return (
-            Array.from({ length: 4}).map(() => (
-                {
-                  email: faker.internet.email(),
-                  imageUrl: 'https://github.com/wendson13.png',
-                }
-              )
+            Array.from({ length: 4 }).map(() => (
+              {
+                email: faker.internet.email(),
+                imageUrl: 'https://github.com/wendson13.png',
+              }
+            )
             )
           )
         },
@@ -146,12 +146,12 @@ export function makeServer({ environment = "test" } = {}) {
           return faker.datatype.number({ min: 100, max: 100000 });
         },
 
-        users(){
+        users() {
           return faker.datatype.number({ min: 50, max: 10000 });
         },
 
         sales() {
-          return faker.datatype.number({ min: 1357, max: 50000});
+          return faker.datatype.number({ min: 1357, max: 50000 });
         },
 
         percentageCompeted() {
@@ -221,7 +221,7 @@ export function makeServer({ environment = "test" } = {}) {
       }),
 
       billingsInfo: Factory.extend({
-        
+
         id() {
           return faker.datatype.uuid();
         },
@@ -233,7 +233,7 @@ export function makeServer({ environment = "test" } = {}) {
         company() {
           return faker.company.companyName();
         },
-        
+
         email() {
           return faker.internet.email();
         },
@@ -255,7 +255,7 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         cardNumber() {
-          return `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999})}`;
+          return `**** **** **** ${faker.datatype.number({ min: 1000, max: 9999 })}`;
         }
       }),
 
@@ -279,7 +279,7 @@ export function makeServer({ environment = "test" } = {}) {
       }),
 
       user: Factory.extend({
-        id(){
+        id() {
           return faker.datatype.uuid();
         },
 
@@ -287,7 +287,7 @@ export function makeServer({ environment = "test" } = {}) {
           return faker.internet.email();
         },
 
-        password(i){
+        password(i) {
           return `${i}admin`
         }
       })
@@ -319,7 +319,7 @@ export function makeServer({ environment = "test" } = {}) {
         mobile: faker.phone.phoneNumber('(##) ### #### ####'),
         email: faker.internet.email(),
         location: faker.address.country(),
-        social: Array.from({ length: Math.ceil(Math.random() * 2)}).map(() => {
+        social: Array.from({ length: Math.ceil(Math.random() * 2) }).map(() => {
           return {
             imageUrl: 'https://github.com/wendson13.png',
             link: 'https://github.com/wendson13'
@@ -342,7 +342,7 @@ export function makeServer({ environment = "test" } = {}) {
         const projects = schema.all('project').models as Project[];
 
         const summaryMonth = () => {
-          return Array.from({ length: 12}).map((_,index) => {
+          return Array.from({ length: 12 }).map((_, index) => {
             return {
               month: monthly[index],
               money: faker.datatype.number({ min: 100, max: 1000 }),
@@ -363,7 +363,7 @@ export function makeServer({ environment = "test" } = {}) {
             monthly: summaryMonth()
           }
         })
-        
+
         return {
           projects,
 
@@ -379,14 +379,14 @@ export function makeServer({ environment = "test" } = {}) {
           summaryYear,
 
           orders: {
-            lastMonth:  Math.ceil(Math.random() * 10),
+            lastMonth: Math.ceil(Math.random() * 10),
 
             list: (
-              Array.from({ length: 5}).map((_,index) => {
+              Array.from({ length: 5 }).map((_, index) => {
                 return {
                   id: index + 1,
                   imageUrl: 'https://github.com/wendson13.png',
-                  message: `New order #${faker.datatype.number({min: 10000000, max: 99999999})}`,
+                  message: `New order #${faker.datatype.number({ min: 10000000, max: 99999999 })}`,
                   createdAt: faker.date.past()
                 }
               })
@@ -398,7 +398,7 @@ export function makeServer({ environment = "test" } = {}) {
       this.get('projects/:id');
 
       this.post('projects/:id', (schema, req) => {
-        
+
         const id = req.params.id;
         const data = JSON.parse(req.requestBody)
 
@@ -406,13 +406,13 @@ export function makeServer({ environment = "test" } = {}) {
           id: id
         })
 
-        if(project){
+        if (project) {
           project.update({
             status: data.status,
             budget: data.budget,
             percentageCompeted: data.percentageCompeted
           })
-          
+
           return project.attrs
         }
         else {
@@ -427,7 +427,7 @@ export function makeServer({ environment = "test" } = {}) {
           id: id
         })
 
-        if(project){
+        if (project) {
           project.destroy()
 
           return new Response(200, {}, {});
@@ -442,7 +442,7 @@ export function makeServer({ environment = "test" } = {}) {
 
         return {
           notifications: (
-            Array.from({ length: 5}).map((_, index) => {
+            Array.from({ length: 5 }).map((_, index) => {
               return {
                 id: index,
                 imageUrl: 'https://github.com/wendson13.png',
@@ -463,7 +463,7 @@ export function makeServer({ environment = "test" } = {}) {
       })
 
       this.post('user/authors/:id', (schema, req) => {
-        
+
         const id = req.params.id;
         const data = JSON.parse(req.requestBody)
 
@@ -471,12 +471,12 @@ export function makeServer({ environment = "test" } = {}) {
           id: id
         })
 
-        if(author){
+        if (author) {
           author.update({
             employed: data.employed,
             functions: data.functions
           })
-          
+
           return author.attrs
         }
         else {
@@ -489,10 +489,10 @@ export function makeServer({ environment = "test" } = {}) {
         const paymentMethods = schema.all('paymentMethod').models as PaymentMethod[];
 
         const getRandomTransactionInfo = () => {
-          const randomAmount = faker.datatype.number({ min: -100000, max: 100000})
-          
+          const randomAmount = faker.datatype.number({ min: -100000, max: 100000 })
+
           const randomType = randomAmount === 0 ? 'pending'
-          : randomAmount > 0 ? 'deposit' : 'withdraw'
+            : randomAmount > 0 ? 'deposit' : 'withdraw'
 
           return {
             amount: randomAmount,
@@ -504,8 +504,8 @@ export function makeServer({ environment = "test" } = {}) {
         const flags = ['visa', 'mastercard'];
 
         return {
-          salary:  faker.datatype.number({ min: 1000, max: 60000}),
-          paypal: faker.datatype.number({ min: 1000, max: 80000}),
+          salary: faker.datatype.number({ min: 1000, max: 60000 }),
+          paypal: faker.datatype.number({ min: 1000, max: 80000 }),
 
           cardHolder: {
             flag: flags[Math.round(Math.random() * flags.length)],
@@ -516,10 +516,10 @@ export function makeServer({ environment = "test" } = {}) {
 
           paymentMethods,
 
-          invoices : (
-            Array.from({ length: 5}).map(() => {
+          invoices: (
+            Array.from({ length: 5 }).map(() => {
               return {
-                amount: faker.datatype.number({ min: 100, max: 1000}),
+                amount: faker.datatype.number({ min: 100, max: 1000 }),
                 cod: faker.finance.bic(),
                 date: faker.date.past(),
               }
@@ -528,9 +528,9 @@ export function makeServer({ environment = "test" } = {}) {
 
           billingsInfo,
 
-          transactions : {
+          transactions: {
             newest: (
-              Array.from({ length: 2}).map((_, index) => {
+              Array.from({ length: 2 }).map((_, index) => {
                 return {
                   id: faker.datatype.uuid() + index,
                   title: faker.company.companyName(),
@@ -540,7 +540,7 @@ export function makeServer({ environment = "test" } = {}) {
             ),
 
             yesterday: (
-              Array.from({ length: 4}).map((_, index) => {
+              Array.from({ length: 4 }).map((_, index) => {
                 return {
                   id: faker.datatype.uuid() + index,
                   title: faker.company.companyName(),
@@ -554,19 +554,19 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.put('user/billing/info/:id', (schema, req) => {
         const id = req.params.id;
-        const data: Partial<BillingsInfo>  = JSON.parse(req.requestBody)
+        const data: Partial<BillingsInfo> = JSON.parse(req.requestBody)
 
         const info = schema.findBy('billingsInfo', {
           id: id
         })
 
-        if(info){
+        if (info) {
           info.update({
             name: data.name,
             company: data.company,
             email: data.email
           })
-          
+
           return info.attrs
         }
         else {
@@ -581,7 +581,7 @@ export function makeServer({ environment = "test" } = {}) {
           id: id
         })
 
-        if(info){
+        if (info) {
           info.destroy()
 
           return new Response(200, {}, {});
@@ -593,18 +593,18 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.put('user/payment-method/:id', (schema, req) => {
         const id = req.params.id;
-        const data: Partial<PaymentMethod>  = JSON.parse(req.requestBody)
+        const data: Partial<PaymentMethod> = JSON.parse(req.requestBody)
 
         const payment = schema.findBy('paymentMethod', {
           id: id
         })
 
-        if(payment && data.cardNumber && data.flag){
+        if (payment && data.cardNumber && data.flag) {
           payment.update({
             cardNumber: `**** **** **** ${data.cardNumber.slice(-4)}`,
             flag: data.flag,
           })
-          
+
           return payment.attrs
         }
         else {
@@ -614,16 +614,16 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.post('user/payment-method', (schema, req) => {
 
-        const data: Partial<PaymentMethod>  = JSON.parse(req.requestBody)
-        
-        if(data.cardNumber && data.flag){
-          
+        const data: Partial<PaymentMethod> = JSON.parse(req.requestBody)
+
+        if (data.cardNumber && data.flag) {
+
           const payment = schema.create('paymentMethod', {
             id: faker.datatype.uuid(),
             cardNumber: `**** **** **** ${data.cardNumber.slice(-4)}`,
             flag: data.flag
           })
-          
+
           return payment.attrs
         }
         else {
@@ -638,7 +638,7 @@ export function makeServer({ environment = "test" } = {}) {
           id: id
         })
 
-        if(payment){
+        if (payment) {
           payment.destroy()
 
           return new Response(200, {}, {});
@@ -663,9 +663,9 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.put('user/profile-about', (schema, req) => {
         const userInfo = schema.first('userInfo');
-        const data: Partial<UserInfo>  = JSON.parse(req.requestBody)
+        const data: Partial<UserInfo> = JSON.parse(req.requestBody)
 
-        if(data && userInfo){
+        if (data && userInfo) {
           userInfo.update({
             about: data.about
           })
@@ -679,10 +679,10 @@ export function makeServer({ environment = "test" } = {}) {
 
       this.put('user/notifications-settings', (schema, req) => {
 
-        const data: Partial<UserSetting>  = JSON.parse(req.requestBody)
+        const data: Partial<UserSetting> = JSON.parse(req.requestBody)
         const settings = schema.first('userSetting')
-        
-        if(data.account && data.application && settings){
+
+        if (data.account && data.application && settings) {
           settings.update({
             ...data,
           })
@@ -702,27 +702,27 @@ export function makeServer({ environment = "test" } = {}) {
           password: data.password
         })?.attrs
 
-        if(user && user.id){
+        if (user && user.id) {
 
           return {
             id: user.id
           }
         }
-        else{
+        else {
           return new Response(404, {}, { error: 'User or password incorrect' });
         }
       })
 
       this.put('/register', (schema, req) => {
 
-        const data : Partial<UserModelType>  = JSON.parse(req.requestBody)
+        const data: Partial<UserModelType> = JSON.parse(req.requestBody)
 
-        if(data && data.email && data.password){
+        if (data && data.email && data.password) {
           const exist = schema.findBy('user', {
             email: data.email
           })
 
-          if(exist){
+          if (exist) {
             return new Response(409, {}, { error: 'This email is already registered' });
           }
 
