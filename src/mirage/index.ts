@@ -356,10 +356,9 @@ export function makeServer({ environment = "test" } = {}) {
         }
 
         const currentYear = new Date().getFullYear();
-
         const summaryYear = Array.from({ length: 2 }).map((_, index) => {
           return {
-            year: faker.date.between(new Date(`${currentYear - index}`).toJSON(), new Date(`${currentYear - (index + 1)}`).toJSON()).getFullYear(),
+            year: faker.date.between(new Date(`${currentYear - (index + 1)}`).toJSON(), new Date(`${currentYear - index}`).toJSON()).getFullYear(),
             monthly: summaryMonth()
           }
         })

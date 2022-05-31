@@ -142,7 +142,7 @@ export const calcPercentageDifference = (num1: number, num2: number) => {
   return percentage;
 }
 
-export function Dashboard () {
+export function Dashboard() {
 
   const [data, setData] = useState<DataType>();
   const { colors } = useTheme();
@@ -150,11 +150,10 @@ export function Dashboard () {
   useEffect(() => {
     const storage = localStorage.getItem('soft@summary')
 
-    api.get<DataFetch>('projects').then(({data}) => {
-
+    api.get<DataFetch>('projects').then(({ data }) => {
 
       const countProjectsComplete = data.projects
-      .filter(project => project.status === 'done').length;
+        .filter(project => project.status === 'done').length;
 
       const totalProjects = data.projects.length
       const percentage = (countProjectsComplete * 100) / totalProjects;
@@ -190,7 +189,7 @@ export function Dashboard () {
         differenceYearSales: calcPercentageDifference(summarySalesCurrentYear, summarySalesLastYear)
       }
 
-      if(storage){
+      if (storage) {
         const summary: Summary = JSON.parse(storage);
 
         setData({
@@ -205,7 +204,7 @@ export function Dashboard () {
 
               percentage: calcPercentageDifference(data.summary.money, summary.money),
             },
-  
+
             clients: {
               amount: Intl.NumberFormat('en-US').format(data.summary.clients),
               percentage: calcPercentageDifference(data.summary.clients, summary.clients),
@@ -215,7 +214,7 @@ export function Dashboard () {
               amount: Intl.NumberFormat('en-US').format(data.summary.users),
               percentage: calcPercentageDifference(data.summary.users, summary.users),
             },
-  
+
             sales: {
               amount: Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -235,8 +234,8 @@ export function Dashboard () {
 
         localStorage.setItem('soft@summary', JSON.stringify(data.summary));
       }
-      else{
-        
+      else {
+
         const summary = {
           money: {
             amount: Intl.NumberFormat('en-US', {
@@ -278,7 +277,7 @@ export function Dashboard () {
     })
   }, [])
 
-  if(!data){
+  if (!data) {
     return (
       <Loading />
     );
@@ -287,29 +286,29 @@ export function Dashboard () {
   return (
     <Container>
       <WidgetBox>
-        <WidgetCard 
-          title="Total's Money" 
+        <WidgetCard
+          title="Total's Money"
           subTitle={data.summary.money.amount}
           percentage={data.summary.money.percentage}
           Icon={FaMoneyCheckAlt}
         />
 
-        <WidgetCard 
-          title="Total's Users" 
+        <WidgetCard
+          title="Total's Users"
           subTitle={data.summary.users.amount}
           percentage={data.summary.users.percentage}
           Icon={GiEarthAmerica}
         />
 
-        <WidgetCard 
-          title="New Clients" 
+        <WidgetCard
+          title="New Clients"
           subTitle={data.summary.clients.amount}
           percentage={data.summary.clients.percentage}
           Icon={GiDiploma}
         />
 
-        <WidgetCard 
-          title="Sales" 
+        <WidgetCard
+          title="Sales"
           subTitle={data.summary.sales.amount}
           percentage={data.summary.sales.percentage}
           Icon={FaShoppingCart}
@@ -322,8 +321,8 @@ export function Dashboard () {
             <span>Built by developers</span>
             <h2>Soft Dashboard</h2>
             <p>From colors, cards, typography to complex elements, you will find the full documentation.</p>
-          
-            <a 
+
+            <a
               href="https://www.figma.com/community/file/987711789844505789"
               target={'_blank'}
               rel='noopener'
@@ -342,7 +341,7 @@ export function Dashboard () {
           <div>
             <h2>Work with the rockets</h2>
             <p>Wealth creation in an evolutionarily recent positive-sum game, It is all about who take the opportunity first.</p>
-            
+
             <button>
               Read More
               <BsArrowRightShort size={26} />

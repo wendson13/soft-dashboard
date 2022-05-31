@@ -11,7 +11,7 @@ import { Switch } from '../../components/Switch';
 import { useAuth } from '../../hooks/useAuth';
 import { Container, Content, Header, RememberBox, SubmitBox, TitleBox } from './styles';
 
-export function Login () {
+export function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,11 +24,11 @@ export function Login () {
   const handleUserSignIn = async (event: FormEvent) => {
     event.preventDefault();
 
-    if(!email.trim() && !password.trim()) return;
+    if (!email.trim() && !password.trim()) return;
     setLoading(true);
 
-    if(!user){
-      await signIn({email, password, remember: isRemember});
+    if (!user) {
+      await signIn({ email, password, remember: isRemember });
     }
 
     setLoading(false);
@@ -69,7 +69,7 @@ export function Login () {
             </TitleBox>
 
             <label>Email
-              <input 
+              <input
                 type='email'
                 placeholder='Email'
                 required
@@ -90,16 +90,17 @@ export function Login () {
               />
             </label>
 
-            <RememberBox>
-              <Switch isChecked={isRemember} toggle={() => setIsRemember(!isRemember)} />
-              <span>Remember me</span>
-            </RememberBox>
+            <Switch
+              text='Remember me'
+              isChecked={isRemember}
+              toggle={() => setIsRemember(!isRemember)}
+            />
 
             <SubmitBox>
-              { 
-                loading ? 
+              {
+                loading ?
                   <Spinner size={2} borderSize={.5} />
-                :
+                  :
                   <button type='submit'>SIGN IN</button>
               }
             </SubmitBox>

@@ -1,68 +1,56 @@
-import { memo } from 'react';
-import styled from 'styled-components'; 
+import styled from 'styled-components';
+import * as SwitchPrimitive from '@radix-ui/react-switch';
 
 type SwitchProps = {
   isChecked: boolean;
+  text: string;
   toggle: () => void;
 }
 
-function SwitchComponent ({ isChecked, toggle } : SwitchProps) {
-
+export function Switch({ isChecked, toggle, text }: SwitchProps) {
   return (
     <Container>
-      <input type="checkbox" checked={isChecked} onChange={toggle} />
-      <span />
+      <SwitchStyle checked={isChecked} onCheckedChange={toggle}>
+        <Thumb />
+      </SwitchStyle>
+      {text}
     </Container>
   );
 }
 
-export const Switch = memo(SwitchComponent, (prev, next) => {
-  return prev.isChecked === next.isChecked
-})
-
 const Container = styled.label`
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.dark};
+`;
+
+const SwitchStyle = styled(SwitchPrimitive.Root)`
   width: 3rem;
   height: 1.5rem;
-  border-radius: 1rem;
+  background: ${({ theme }) => theme.colors.gray5};
+  border-radius: 9999px;
+  padding-left: .1rem;
   position: relative;
-  overflow: hidden;
+  border: 0;
 
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
+  &[data-state="checked"] {
+    background: ${({ theme }) => theme.colors.dark};
+  };
+`;
 
-  span {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-    transition: .5s;
-    background: ${({theme}) => theme.colors.gray5};
-    
-    &:before {
-      position: absolute;
-      content: '';
-      width: 1rem;
-      height: 1rem;
-      margin-left: .25rem;
-      border-radius: 9999px;
-      background: ${({theme}) => theme.colors.gray2};
-      transition: .3s;
-    }
-  }
+const Thumb = styled(SwitchPrimitive.Thumb)`
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background: ${({ theme }) => theme.colors.gray2};
+  border-radius: 9999px;
+  transition: transform 100ms;
+  transform: translateX(2px);
+  will-change: transform;
 
-  input:checked + span {
-    background: ${({theme}) => theme.colors.dark};
-
-    &:before {
-      transform: translateX(22px);
-    }
-  }
-`
+  &[data-state="checked"] {
+    transform: translateX(170%);
+  };
+`;
