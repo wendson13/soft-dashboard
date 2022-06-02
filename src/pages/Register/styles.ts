@@ -12,7 +12,7 @@ export const Header = styled.header`
   strong {
     font-size: 1.25rem;
     font-weight: 500;
-    color: ${({theme}) => theme.colors.gray1};
+    color: ${({ theme }) => theme.colors.gray1};
   }
 
   nav {
@@ -24,7 +24,7 @@ export const Header = styled.header`
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      color: ${({theme}) => theme.colors.gray1};
+      color: ${({ theme }) => theme.colors.gray1};
     }
   }
 `;
@@ -56,17 +56,17 @@ export const Container = styled.main`
     gap: 1rem;
     padding: 2rem;
     border-radius: 1rem;
-    box-shadow: .1rem .1rem 1rem ${({theme}) => theme.colors.gray9};
-    background: ${({theme}) => theme.colors.gray1};
+    box-shadow: .1rem .1rem 1rem ${({ theme }) => theme.colors.gray9};
+    background: ${({ theme }) => theme.colors.gray1};
 
     h1 {
       font-size: 2rem;
-      color: ${({theme}) => theme.colors.dark};
+      color: ${({ theme }) => theme.colors.dark};
     }
 
     > span {
       font-size: 1.5rem;
-      color: ${({theme}) => theme.colors.gray8};
+      color: ${({ theme }) => theme.colors.gray8};
     }
 
     form {
@@ -78,11 +78,11 @@ export const Container = styled.main`
       > input {
         padding: 1rem;
         border-radius: .5rem;
-        border: .1rem solid ${({theme}) => theme.colors.gray6};
-        color: ${({theme}) => theme.colors.dark};
+        border: .1rem solid ${({ theme }) => theme.colors.gray6};
+        color: ${({ theme }) => theme.colors.dark};
         
         &:focus {
-          outline: .1rem solid ${({theme}) => theme.colors.primary};
+          outline: .1rem solid ${({ theme }) => theme.colors.primary};
         }
       }
 
@@ -91,50 +91,20 @@ export const Container = styled.main`
         padding: 1rem;
         border-radius: .5rem;
         border: 0;
-        color: ${({theme}) => theme.colors.gray1};
-        background: ${({theme}) => theme.gradients.dark};
+        color: ${({ theme }) => theme.colors.gray1};
+        background: ${({ theme }) => theme.gradients.dark};
       }
 
       > span {
         margin: 0 auto;
-        color: ${({theme}) => theme.colors.gray7};
+        color: ${({ theme }) => theme.colors.gray7};
 
         a {
           font-weight: 700;
-          color: ${({theme}) => theme.colors.dark};
+          color: ${({ theme }) => theme.colors.dark};
         }
       }
     }
-  }
-`;
-
-type SwitchBoxType = {
-  isAccept: boolean;
-}
-
-export const SwitchBox = styled.div<SwitchBoxType>`
-  display: flex; 
-  align-items: center;
-  gap: .5rem;
-  border-radius: .25rem;
-  padding: ${({isAccept}) => isAccept ? '' : '.25rem'};
-  outline: .2rem solid ${({theme, isAccept}) => isAccept ? 'none' : theme.colors.danger};
-
-  span {
-    color: ${({theme, isAccept}) => isAccept ? theme.colors.dark : theme.colors.danger};
-
-    a {
-      font-weight: 700;
-    }
-  }
-
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 0;
-    background: transparent;
-    border-radius: .25rem;
   }
 `;
 
@@ -149,7 +119,7 @@ export const SubmitBox = styled.div`
     padding: 1rem;
     border-radius: .5rem;
     border: 0;
-    color: ${({theme}) => theme.colors.gray1};
-    background: ${({theme}) => theme.gradients.dark};
+    color: ${({ theme }) => theme.colors.gray1};
+    background: ${({ theme }) => theme.gradients.dark};
   }
 `;

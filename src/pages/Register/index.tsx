@@ -1,20 +1,21 @@
-import { FormEvent, useRef, useState } from 'react';
+import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import { FormEvent, useState } from 'react';
 import { AiFillShop } from 'react-icons/ai';
-import { BsCheckSquare, BsFileTextFill, BsFillCheckSquareFill } from 'react-icons/bs';
+import { BsFileTextFill } from 'react-icons/bs';
 import { FaUserAlt } from 'react-icons/fa';
 import { IoRocketSharp } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
-import { useTheme } from 'styled-components'; 
+import { useTheme } from 'styled-components';
+import { Checkbox } from '../../components/Checkbox';
 import { LoggedOutFooter } from '../../components/Footer/LoggedOutFooter';
 import { Spinner } from '../../components/Loading';
 import { useAuth } from '../../hooks/useAuth';
-import { BackgroundImage, Container, Header, SubmitBox, SwitchBox } from './styles';
+import { BackgroundImage, Container, Header, SubmitBox } from './styles';
 
-export function Register () {
+export function Register() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isChecked, setIsChecked] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
@@ -25,16 +26,12 @@ export function Register () {
   const handleUserRegister = async (event: FormEvent) => {
     event.preventDefault();
 
-    if(!isChecked){
-      setTermsIsAccept(false);
-    }
-    
-    if(!email.trim() || !password.trim() || !isChecked) return;
+    if (!email.trim() || !password.trim() || !termsIsAccept) return;
 
     setLoading(true);
 
 
-    await signUp({email, password})
+    await signUp({ email, password })
 
     setLoading(false);
     navigation('/')
@@ -67,7 +64,7 @@ export function Register () {
 
       <Container>
         <BackgroundImage />
-        
+
         <div>
           <h1>Register with</h1>
 
@@ -76,48 +73,41 @@ export function Register () {
           <form
             onSubmit={handleUserRegister}
           >
-            <input 
-              type='text' 
+            <input
+              type='text'
               placeholder='Name'
             />
 
-            <input 
-              type='email' 
+            <input
+              type='email'
               placeholder='Email'
               value={email}
               onChange={e => setEmail(e.target.value.trim())}
             />
 
-            <input 
+            <input
               type='password'
               placeholder='Password'
               value={password}
               onChange={e => setPassword(e.target.value.trim())}
             />
 
-            <SwitchBox
-              isAccept={termsIsAccept}
+            <Checkbox
+              isChecked={termsIsAccept}
+              toggle={() => setTermsIsAccept(!termsIsAccept)}
+              isRequired={true}
             >
-              <button
-                onClick={() => setIsChecked(!isChecked)}
-                type='button'
-              >
-                {
-                  isChecked ?  
-                    <BsFillCheckSquareFill size={24} color={colors.dark} />
-                    :
-                    <BsCheckSquare size={24} color={termsIsAccept ? colors.dark : colors.danger} />
-                }
-              </button>
-
-              <span>I agree the <Link to=''>Terms and Conditions</Link></span>
-            </SwitchBox>
+              I agree the {<Link to='/terms'>Terms and Conditions</Link>}
+            </Checkbox>
 
             <SubmitBox>
-              { 
-                loading ? 
-                  <Spinner size={2} borderSize={.5} />
-                :
+              {
+                loading ?
+                  <AccessibleIcon.Root
+                    label='loading spinner.'
+                    children={<Spinner size={2} borderSize={.5} />}
+                  />
+                  :
                   <button type='submit'>SIGN UP</button>
               }
             </SubmitBox>
