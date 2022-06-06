@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { IoMdMore } from 'react-icons/io';
 import { useTheme } from 'styled-components';
 import { api } from '../../../../services/api';
+import { DropdownMenu } from '../../../DropdownMenu';
 import { Spinner } from '../../../Loading';
 import { BoxShadow } from '../../../Styles/Containers';
-import {  Options, PercentageBody, Table, TableRowBody, TitleBody, TitleBox } from './styles';
+import { Options, PercentageBody, Table, TableRowBody, TitleBody, TitleBox } from './styles';
 import { TableItemEditable } from './TableItemEditable';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
 type User = {
   email: string;
@@ -38,19 +40,18 @@ type ProjectsTableProps = {
   setProjectsList: (project: Projects) => void;
 }
 
-export function ProjectsTable ({ projects, percentageProjectsCompeted, setProjectsList } : ProjectsTableProps) {
+export function ProjectsTable({ projects, percentageProjectsCompeted, setProjectsList }: ProjectsTableProps) {
 
   const [currentModalOpen, setCurrentModalOpen] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { colors } = useTheme();
 
   const handleChangeCurrentModal = (id: string) => {
-    if(loading) return;
+    if (loading) return;
 
-    if(currentModalOpen !== id){
+    if (currentModalOpen !== id) {
       setCurrentModalOpen(id)
       setModalIsOpen(true);
     }
@@ -60,14 +61,14 @@ export function ProjectsTable ({ projects, percentageProjectsCompeted, setProjec
   }
 
   const handleActiveEditMode = (id: string) => {
-    if(loading) return;
+    if (loading) return;
 
-    if(currentEditing !== id){
+    if (currentEditing !== id) {
       setCurrentEditing(id);
     }
-    
-    
-    if(isEditMode) return;
+
+
+    if (isEditMode) return;
     setIsEditMode(true);
   }
 
@@ -76,16 +77,16 @@ export function ProjectsTable ({ projects, percentageProjectsCompeted, setProjec
 
     const projectData = projects.find(project => project.id === data.id)
 
-    if(projectData){
-     
-      const { data : newProject } = await api.post<Project>(`projects/${projectData.id}`, { 
+    if (projectData) {
+
+      const { data: newProject } = await api.post<Project>(`projects/${projectData.id}`, {
         status: data.status,
         budget: data.budget,
         percentageCompeted: data.percentageCompeted
       })
 
       const result = projects.map(project => {
-        if(project.id === data.id){
+        if (project.id === data.id) {
           return newProject;
         }
         else {
@@ -116,7 +117,7 @@ export function ProjectsTable ({ projects, percentageProjectsCompeted, setProjec
 
     const projectData = projects.find(project => project.id === id);
 
-    if(projectData){
+    if (projectData) {
       await api.delete(`projects/${id}`)
 
       const result = projects.filter(project => project.id !== id);
@@ -162,71 +163,51 @@ export function ProjectsTable ({ projects, percentageProjectsCompeted, setProjec
               return (
                 <TableRowBody key={project.id}>
                   {
-                    isEditMode && currentEditing === project.id ? 
+                    isEditMode && currentEditing === project.id ?
 
-                    <TableItemEditable
-                      project={project}
-                      setProjectsList={handleProjectDataChange}
-                      loading={loading}
-                    />
-                    :
-                    <>
-                      <TitleBody>
-                        <span>
-                          <img src={project.imageUrl} alt={project.name} />
-                          {project.name}
-                        </span>
-                      </TitleBody>
-                      <td>
-                        {
-                          project.budget ?
-                          Intl.NumberFormat('en-US', {
-                            style: 'currency',
-                            currency: 'USD',
-                          }).format(project.budget)
-                          : 
-                          'Not Set'
-                        }
-                      </td>
+                      <TableItemEditable
+                        project={project}
+                        setProjectsList={handleProjectDataChange}
+                        loading={loading}
+                      />
+                      :
+                      <>
+                        <TitleBody>
+                          <span>
+                            <img src={project.imageUrl} alt={project.name} />
+                            {project.name}
+                          </span>
+                        </TitleBody>
+                        <td>
+                          {
+                            project.budget ?
+                              Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD',
+                              }).format(project.budget)
+                              :
+                              'Not Set'
+                          }
+                        </td>
 
-                      <td>{project.status}</td>
-                      <PercentageBody percentage={`${project.percentageCompeted}%`} status={project.status}>
-                        {`${project.percentageCompeted}%`}
-                        <div />
-                      </PercentageBody>
+                        <td>{project.status}</td>
+                        <PercentageBody percentage={`${project.percentageCompeted}%`} status={project.status}>
+                          {`${project.percentageCompeted}%`}
+                          <div />
+                        </PercentageBody>
 
-                      
-                      <Options 
-                        itemId={project.id}
-                        isOpen={modalIsOpen} 
-                        current={currentModalOpen}
-                      >
-                        {
-                          loading && currentEditing === project.id ?
-                          <div><Spinner size={2}  borderSize={.5} /></div>
-                          :
-                          <IoMdMore 
-                            onClick={() => handleChangeCurrentModal(project.id)}
-                            size={24} 
-                            color={colors.gray8}
+                        <Options>
+                          <DropdownMenu
+                            Icon={loading && currentEditing === project.id ?
+                              () => <Spinner size={2} borderSize={.5} /> : IoMdMore}
+                            items={[
+                              { text: 'Edit', onSelect: () => handleActiveEditMode(project.id) },
+                              { text: 'Delete', onSelect: () => handleDeleteProject(project.id) }
+                            ]}
+                            showSide="left"
                           />
-                        }
-
-                        <span>
-                          <button
-                            onClick={() => handleActiveEditMode(project.id)}
-                          >
-                            Edit
-                          </button>
-
-                          <button
-                            onClick={() => handleDeleteProject(project.id)}
-                          >
-                            Delete
-                          </button>
-                        </span>
-                      </Options>
-                    </>
+                        </Options>
+                      </>
                   }
                 </TableRowBody>
               );

@@ -10,7 +10,7 @@ export const TitleBox = styled.div`
   h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: ${({theme}) => theme.colors.dark};
+    color: ${({ theme }) => theme.colors.dark};
   }
 
   p {
@@ -18,11 +18,11 @@ export const TitleBox = styled.div`
     align-items: center;
     gap: .5rem;
     font-size: 1rem;
-    color: ${({theme}) => theme.colors.gray7};
+    color: ${({ theme }) => theme.colors.gray7};
 
     span {
       font-weight: 700;
-      color: ${({theme}) => theme.colors.info};
+      color: ${({ theme }) => theme.colors.info};
     }
   }
 `;
@@ -35,7 +35,7 @@ export const Table = styled.table`
   th, td {
     text-align: left;
     font-size: 1rem;
-    color: ${({theme}) => theme.colors.gray8};
+    color: ${({ theme }) => theme.colors.gray8};
     padding: 1rem 0;
 
     &:first-child {
@@ -46,15 +46,14 @@ export const Table = styled.table`
 
   th {
     font-weight: 700;
-    color: ${({theme}) => theme.colors.gray8};
+    color: ${({ theme }) => theme.colors.gray8};
   }
 `;
 
 export const TableRowBody = styled.tr`
-  border-top: .2rem solid ${({theme}) => theme.colors.gray4};
+  border-top: .2rem solid ${({ theme }) => theme.colors.gray4};
 
   td {
-    width: 20%;
     text-align: left;
     font-size: 1rem;
     font-weight: 500;
@@ -68,7 +67,7 @@ export const TableRowBody = styled.tr`
 
     &:first-child {
       padding-left: 1rem;
-      color: ${({theme}) => theme.colors.dark}
+      color: ${({ theme }) => theme.colors.dark}
     }
 
     &:last-child{
@@ -104,7 +103,7 @@ export const PercentageBody = styled.td<PercentageBodyProps>`
       margin-top: .5rem;
       overflow: hidden;
       border-radius: 1rem;
-      background: ${({theme}) => theme.colors.gray7};
+      background: ${({ theme }) => theme.colors.gray7};
 
       &::after {
         content: '';
@@ -112,77 +111,24 @@ export const PercentageBody = styled.td<PercentageBodyProps>`
         height: 100%;
         display: block;
         border-radius: 1rem;
-        background: ${({status, theme}) => {
-          if(status === 'done'){
-            return theme.colors.success;
-          }
-          if(status === 'working'){
-            return theme.colors.info;
-          }
-          if(status === 'canceled'){
-            return theme.colors.danger;
-          }
-        }};
+        background: ${({ status, theme }) => {
+    if (status === 'done') {
+      return theme.colors.success;
+    }
+    if (status === 'working') {
+      return theme.colors.info;
+    }
+    if (status === 'canceled') {
+      return theme.colors.danger;
+    }
+  }};
       }
     }
 `;
 
-type OptionsProps = {
-  isOpen: boolean;
-  itemId: string;
-  current: string;
-}
-
-export const Options = styled.td<OptionsProps>`
-  position: relative;
-
-  > div {
-    display: flex;
-    justify-content: end;
-  }
-
-  > span {
-    display: flex;
-    flex-direction: column;
-    background: red;
-    position: absolute;
-    right: 5.5rem;
-    border-radius: .5rem;
-    overflow: hidden;
-    transition: .3s;
-    box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray6};
-    background: ${({theme}) => theme.colors.gray1};
-
-    ${({ isOpen, current, itemId }) => isOpen && current === itemId ? (
-      `top: 1rem;
-      opacity: 1;
-      z-index: 100;`
-    ):
-      `top: .5rem;
-      opacity: 0;
-      z-index: -1;`
-    }
-
-
-    button {
-      border: 0;
-      font-size: 1.1rem;
-      padding: .25rem .5rem;
-      background: transparent;
-
-      &:hover {
-        background: ${({theme}) => theme.colors.gray4};
-      }
-    }
-
-    button:last-child {
-      border-top: .1rem solid ${({theme}) => theme.colors.gray4};
-    }
-  }
-
-  svg {
-    cursor: pointer;
-  }
+export const Options = styled.td`
+  display: flex;
+  justify-content: end;
 `;
 
 export const TableEditableInput = styled.input`
