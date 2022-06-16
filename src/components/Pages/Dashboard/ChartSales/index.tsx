@@ -22,7 +22,7 @@ type ChartSalesProps = {
   summaryYear: SummaryYear;
 }
 
-export function ChartSales ({ summaryYear } : ChartSalesProps) {
+export function ChartSales({ summaryYear }: ChartSalesProps) {
 
   const { colors } = useTheme();
 
@@ -81,38 +81,38 @@ export function ChartSales ({ summaryYear } : ChartSalesProps) {
       },
     }
   }
-  
+
   return (
     <BoxShadow>
       <TitleBox>
         <h2>Sales Overview</h2>
         <span>
           {
-            summaryYear.differenceYearSales > 0 
-            ? (
-              <>
-                <BiUpArrowAlt size={24} color={colors.success}/>
-                {`+${summaryYear.differenceYearSales.toFixed(0)}% more in ${summaryYear.currentYear.year}`}
-              </>
-            ) 
-            : (
-              <>
-                <BiDownArrowAlt size={24} color={colors.danger}/>
-                {`${summaryYear.differenceYearSales.toFixed(0)}% less in ${summaryYear.currentYear.year}`}
-              </>
-            )
+            summaryYear.differenceYearSales > 0
+              ? (
+                <>
+                  <BiUpArrowAlt size={24} color={colors.success} />
+                  {`+${summaryYear.differenceYearSales.toFixed(0)}% more in ${summaryYear.currentYear.year}`}
+                </>
+              )
+              : (
+                <>
+                  <BiDownArrowAlt size={24} color={colors.danger} />
+                  {`${summaryYear.differenceYearSales.toFixed(0)}% less in ${summaryYear.currentYear.year}`}
+                </>
+              )
           }
         </span>
       </TitleBox>
 
       <ChartBox>
-        <Chart options={options} 
+        <Chart options={options}
           series={[
             {
               name: String(summaryYear.currentYear.year),
               data: summaryYear.currentYear.sales,
               color: colors.primary,
-            }, 
+            },
             {
               name: String(summaryYear.lastYear.year),
               data: summaryYear.lastYear.sales,
@@ -131,7 +131,7 @@ export function ChartSales ({ summaryYear } : ChartSalesProps) {
 const ChartBox = styled.div`
   border-radius: .5rem;
   padding: .5rem;
-  background: ${({theme}) => theme.colors.gray1};
+  background: ${({ theme }) => theme.colors.gray1};
 `;
 
 const TitleBox = styled.div`
@@ -148,6 +148,6 @@ const TitleBox = styled.div`
     display: flex;
     align-items: center;
     gap: .5rem;
-    color: ${({theme}) => theme.colors.gray8};
+    color: ${({ theme }) => theme.colors.gray8};
   }
 `;

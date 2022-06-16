@@ -1,4 +1,4 @@
-import styled from 'styled-components'; 
+import styled from 'styled-components';
 
 type Member = {
   imageUrl: string;
@@ -8,7 +8,7 @@ type Member = {
 type ProjectType = {
   id: string;
   name: string;
-  projectCover: string;
+  coverUrl: string;
   description: string;
   members: Member[];
 }
@@ -17,10 +17,10 @@ type ProjectItemProps = {
   project: ProjectType
 }
 
-export function ProjectItem ({ project }: ProjectItemProps) {
+export function ProjectItem({ project }: ProjectItemProps) {
   return (
     <Container>
-      <img src={project.projectCover} alt={project.name} />
+      <img src={project.coverUrl} alt={project.name} />
 
       <strong>Project #{project.id}</strong>
       <h3>{project.name}</h3>
@@ -50,24 +50,24 @@ const Container = styled.div`
     min-width: 20%;
     width: 100%;
     height: 10rem;
-    object-fit: cover;
+    object-fit: coverUrl;
     margin-bottom: 1rem;
     border-radius: 1rem;
-    box-shadow: .1rem .1rem .75rem ${({theme}) => theme.colors.gray5};
+    box-shadow: .1rem .1rem .75rem ${({ theme }) => theme.colors.gray5};
   }
 
   > strong {
     font-weight: '500';
-    color: ${({theme}) => theme.colors.gray7};
+    color: ${({ theme }) => theme.colors.gray7};
   }
 
   h3 {
     font-size: 1.25rem;
-    color: ${({theme}) => theme.colors.dark};
+    color: ${({ theme }) => theme.colors.dark};
   }
 
   > p {
-    color: ${({theme}) => theme.colors.gray8};
+    color: ${({ theme }) => theme.colors.gray8};
     margin-bottom: 1rem;
   }
 
@@ -81,9 +81,9 @@ const Container = styled.div`
       font-weight: 700;
       padding: 1rem;
       border-radius: .5rem;
-      border: .1rem solid ${({theme}) => theme.colors.primary};
-      color: ${({theme}) => theme.colors.primary};
-      box-shadow: .1rem .1rem .5rem ${({theme}) => theme.colors.gray6};
+      border: .1rem solid ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.primary};
+      box-shadow: .1rem .1rem .5rem ${({ theme }) => theme.colors.gray6};
       background: transparent;
     }
 

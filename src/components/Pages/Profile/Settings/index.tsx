@@ -98,7 +98,6 @@ export function Settings({ account, application }: SettingsProps) {
 }
 
 const Container = styled.div`
-  max-width: 27rem;
   width: 100%;
   display: flex;
   flex-direction: column;

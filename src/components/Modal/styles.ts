@@ -8,7 +8,7 @@ export const Overlay = styled(DialogOverlay)`
 `;
 
 export const Content = styled(DialogContent)`
-  position: absolute;
+  position: fixed;
   box-shadow: .1rem .1rem .5rem ${({ theme }) => theme.colors.gray6};
   background: ${({ theme }) => theme.colors.gray1};
   overflow: auto;

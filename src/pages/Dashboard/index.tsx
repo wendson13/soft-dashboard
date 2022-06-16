@@ -50,13 +50,13 @@ type Order = {
 type Project = {
   id: string;
   name: string;
-  imageUrl: string;
+  logoUrl: string;
   members: User[];
   users: number;
   clients: number;
   sales: number;
   budget: number;
-  percentageCompeted: number;
+  percentageCompleted: number;
   status: 'working' | 'canceled' | 'done';
 }
 
@@ -97,7 +97,7 @@ type SummaryType = {
 
 type DataType = {
   projects: Project[],
-  percentageCompeted: number;
+  percentageCompleted: number;
   summary: SummaryType;
   summaryMonth: {
     monthly: string[];
@@ -174,8 +174,7 @@ export function Dashboard() {
       }
 
       const summarySalesCurrentYear = data.summaryYear[0].monthly.reduce((count, item) => item.sales + count, 0);
-      const summarySalesLastYear = data.summaryYear[0].monthly.reduce((count, item) => item.sales + count, 1)
-
+      const summarySalesLastYear = data.summaryYear[1].monthly.reduce((count, item) => item.sales + count, 1)
       const summaryYear = {
         currentYear: {
           year: data.summaryYear[0].year,
@@ -194,7 +193,7 @@ export function Dashboard() {
 
         setData({
           projects: data.projects,
-          percentageCompeted: percentage,
+          percentageCompleted: percentage,
           summary: {
             money: {
               amount: Intl.NumberFormat('en-US', {
@@ -262,7 +261,7 @@ export function Dashboard() {
 
         setData({
           projects: data.projects,
-          percentageCompeted: percentage,
+          percentageCompleted: percentage,
           summary,
 
           summaryMonth,
@@ -358,7 +357,7 @@ export function Dashboard() {
       </ChartsBox>
 
       <TablesBox>
-        <ProjectsTable projects={data.projects} percentage={data.percentageCompeted} />
+        <ProjectsTable projects={data.projects} percentage={data.percentageCompleted} />
         <OrdersHistoryTable orders={data.orders} />
       </TablesBox>
     </Container>

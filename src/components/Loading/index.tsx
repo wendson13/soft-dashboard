@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 
 type SpinnerProps = {
   size?: number
   borderSize?: number;
 }
 
-export function Loading () {
+export function Loading() {
   return (
     <Container>
       <Spinner />
@@ -13,9 +14,11 @@ export function Loading () {
   );
 }
 
-export function Spinner ({ size = 10, borderSize = 1.5 }: SpinnerProps) {
+export function Spinner({ size = 10, borderSize = 1.5 }: SpinnerProps) {
   return (
-    <SpinnerStyle size={size}  borderSize={borderSize} />
+    <AccessibleIcon.Root label='loading'>
+      <SpinnerStyle size={size} borderSize={borderSize} />
+    </AccessibleIcon.Root>
   );
 }
 
@@ -35,11 +38,11 @@ type SpinnerType = {
 }
 
 const SpinnerStyle = styled.div<SpinnerType>`
-  width: ${({size}) => `${size}rem`};
-  height: ${({size}) => `${size}rem`};
+  width: ${({ size }) => `${size}rem`};
+  height: ${({ size }) => `${size}rem`};
   border-radius: 9999px;
-  border: ${({borderSize}) => `${borderSize}rem`} solid;
-  border-color: ${({theme}) => theme.colors.gray5} ${({theme}) => theme.colors.gray5} ${({theme}) => theme.colors.gray5} ${({theme}) => theme.colors.info};
+  border: ${({ borderSize }) => `${borderSize}rem`} solid;
+  border-color: ${({ theme }) => theme.colors.gray5} ${({ theme }) => theme.colors.gray5} ${({ theme }) => theme.colors.gray5} ${({ theme }) => theme.colors.info};
   animation: .6s spinner ease-in-out infinite;
 
   @keyframes spinner {

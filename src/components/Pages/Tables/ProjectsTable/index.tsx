@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { IoMdMore } from 'react-icons/io';
-import { useTheme } from 'styled-components';
 import { api } from '../../../../services/api';
 import { DropdownMenu } from '../../../DropdownMenu';
 import { Spinner } from '../../../Loading';
 import { BoxShadow } from '../../../Styles/Containers';
 import { Options, PercentageBody, Table, TableRowBody, TitleBody, TitleBox } from './styles';
 import { TableItemEditable } from './TableItemEditable';
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
 type User = {
   email: string;
@@ -19,28 +17,28 @@ type Status = 'working' | 'canceled' | 'done';
 type Project = {
   id: string;
   name: string;
-  imageUrl: string;
+  logoUrl: string;
   members: User[];
   users: number;
   clients: number;
   sales: number;
   budget: number;
-  percentageCompeted: number;
+  percentageCompleted: number;
   status: Status;
 }
 
 type Projects = {
   projects: Project[];
-  percentageProjectsCompeted: number;
+  percentageProjectsCompleted: number;
 }
 
 type ProjectsTableProps = {
   projects: Project[],
-  percentageProjectsCompeted: number;
+  percentageProjectsCompleted: number;
   setProjectsList: (project: Projects) => void;
 }
 
-export function ProjectsTable({ projects, percentageProjectsCompeted, setProjectsList }: ProjectsTableProps) {
+export function ProjectsTable({ projects, percentageProjectsCompleted, setProjectsList }: ProjectsTableProps) {
 
   const [currentModalOpen, setCurrentModalOpen] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
@@ -79,10 +77,10 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
 
     if (projectData) {
 
-      const { data: newProject } = await api.post<Project>(`projects/${projectData.id}`, {
+      const { data: newProject } = await api.put<Project>(`projects/${projectData.id}`, {
         status: data.status,
         budget: data.budget,
-        percentageCompeted: data.percentageCompeted
+        percentageCompleted: data.percentageCompleted
       })
 
       const result = projects.map(project => {
@@ -95,11 +93,11 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
       })
 
       const countProjectsComplete = projects.filter(project => project.status === 'done').length;
-      const percentageProjectsCompeted = (countProjectsComplete * 100) / projects.length;
+      const percentageProjectsCompleted = (countProjectsComplete * 100) / projects.length;
 
       const projectsList = {
         projects: result,
-        percentageProjectsCompeted
+        percentageProjectsCompleted
       }
 
       setProjectsList(projectsList);
@@ -123,11 +121,11 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
       const result = projects.filter(project => project.id !== id);
 
       const countProjectsComplete = projects.filter(project => project.status === 'done').length;
-      const percentageProjectsCompeted = (countProjectsComplete * 100) / projects.length;
+      const percentageProjectsCompleted = (countProjectsComplete * 100) / projects.length;
 
       setProjectsList({
         projects: result,
-        percentageProjectsCompeted
+        percentageProjectsCompleted
       });
     }
 
@@ -140,7 +138,7 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
         <h2>Projects</h2>
         <p>
           done this month
-          <span>{`${percentageProjectsCompeted.toFixed(0)}%`}</span>
+          <span>{`${percentageProjectsCompleted.toFixed(0)}%`}</span>
         </p>
       </TitleBox>
 
@@ -174,7 +172,7 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
                       <>
                         <TitleBody>
                           <span>
-                            <img src={project.imageUrl} alt={project.name} />
+                            <img src={project.logoUrl} alt={project.name} />
                             {project.name}
                           </span>
                         </TitleBody>
@@ -191,8 +189,8 @@ export function ProjectsTable({ projects, percentageProjectsCompeted, setProject
                         </td>
 
                         <td>{project.status}</td>
-                        <PercentageBody percentage={`${project.percentageCompeted}%`} status={project.status}>
-                          {`${project.percentageCompeted}%`}
+                        <PercentageBody percentage={`${project.percentageCompleted}%`} status={project.status}>
+                          {`${project.percentageCompleted}%`}
                           <div />
                         </PercentageBody>
 

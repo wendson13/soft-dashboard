@@ -132,18 +132,10 @@ export const Options = styled.td`
 `;
 
 export const TableEditableInput = styled.input`
-  padding: .5rem;
+  padding: .75rem .5rem;
   border-radius: .5rem;
   border: .1rem solid gray;
   font-size: 1.1rem;
-`;
-
-export const TableEditableSelect = styled.select`
-  padding: .5rem;
-  border-radius: .5rem;
-  border: .1rem solid gray;
-  background: transparent;
-  cursor: pointer;
 `;
 
 export const TableEditableSubmit = styled.td`
@@ -151,7 +143,6 @@ export const TableEditableSubmit = styled.td`
     display: flex;
     justify-content: end;
   }
-
 
   button {
     background: transparent;

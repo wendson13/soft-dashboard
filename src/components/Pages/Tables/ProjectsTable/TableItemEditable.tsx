@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Spinner } from '../../../Loading';
-import { TableEditableInput, TableEditableSelect, TableEditableSubmit, TitleBody } from './styles';
+import { Select } from '../../../Select';
+import { TableEditableInput, TableEditableSubmit, TitleBody } from './styles';
 
 type User = {
   email: string;
@@ -12,13 +13,13 @@ type Status = 'working' | 'canceled' | 'done';
 type Project = {
   id: string;
   name: string;
-  imageUrl: string;
+  logoUrl: string;
   members: User[];
   users: number;
   clients: number;
   sales: number;
   budget: number;
-  percentageCompeted: number;
+  percentageCompleted: number;
   status: Status;
 }
 
@@ -28,57 +29,54 @@ type TableItemEditableProps = {
   loading: boolean
 }
 
-export function TableItemEditable ({ project, setProjectsList, loading } : TableItemEditableProps ) {
+export function TableItemEditable({ project, setProjectsList, loading }: TableItemEditableProps) {
 
   const [budget, setBudget] = useState(project.budget);
   const [status, setStatus] = useState(project.status)
-  const [percentage, setPercentage] = useState(project.percentageCompeted)
+  const [percentage, setPercentage] = useState(project.percentageCompleted)
 
   return (
     <>
       <TitleBody>
         <span>
-          <img src={project.imageUrl} alt={project.name} />
+          <img src={project.logoUrl} alt={project.name} />
           {project.name}
         </span>
       </TitleBody>
       <td>
-        <TableEditableInput 
+        <TableEditableInput
+          autoFocus
           type="number"
           min={0}
           value={budget}
           onChange={(e) => setBudget(Number(e.target.value))}
           placeholder={
-          project.budget ?
-          Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          }).format(project.budget)
-          : 
-          'Not Set'
-        } />
+            project.budget ?
+              Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(project.budget)
+              :
+              'Not Set'
+          } />
       </td>
 
       <td>
-        <TableEditableSelect 
-          value={status}
-          onChange={(e) => {
-            const statusValue = e.target.value as Status;
-
-            setStatus(statusValue);
-          }}
-        >
-          <option>done</option>
-          <option>working</option>
-          <option>canceled</option>
-        </TableEditableSelect>
+        <Select
+          onValueChange={e => setStatus(e as Status)}
+          selectItemsId={[
+            'done',
+            'working',
+            'canceled'
+          ]}
+        />
       </td>
 
       <td>
-        <TableEditableInput 
-          type="number" 
-          placeholder={`${project.percentageCompeted}%`}
-          max={100} 
+        <TableEditableInput
+          type="number"
+          placeholder={`${project.percentageCompleted}%`}
+          max={100}
           min={0}
           value={percentage}
           onChange={(e) => setPercentage(Number(e.target.value))}
@@ -87,19 +85,19 @@ export function TableItemEditable ({ project, setProjectsList, loading } : Table
 
       <TableEditableSubmit>
         {
-          loading ? 
-          <div><Spinner size={2}  borderSize={.5} /></div>
-          :
-          <button
-            onClick={() => setProjectsList({
-              ...project,
-              budget,
-              status,
-              percentageCompeted: percentage
-            })}
-          >
-            Save
-          </button>
+          loading ?
+            <div><Spinner size={2} borderSize={.5} /></div>
+            :
+            <button
+              onClick={() => setProjectsList({
+                ...project,
+                budget,
+                status,
+                percentageCompleted: percentage
+              })}
+            >
+              Save
+            </button>
         }
       </TableEditableSubmit>
     </>

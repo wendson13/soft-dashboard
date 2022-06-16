@@ -13,13 +13,13 @@ type UserProject = {
 type Project = {
   id: string;
   name: string;
-  imageUrl: string;
+  logoUrl: string;
   members: UserProject[];
   users: number;
   clients: number;
   sales: number;
   budget: number;
-  percentageCompeted: number;
+  percentageCompleted: number;
   status: 'working' | 'canceled' | 'done';
 }
 
@@ -29,7 +29,7 @@ type DataFetch = {
 
 type Projects = {
   projects: Project[];
-  percentageProjectsCompeted: number;
+  percentageProjectsCompleted: number;
 }
 
 type User = {
@@ -45,7 +45,7 @@ type User = {
   }
 }
 
-export function Tables () {
+export function Tables() {
 
   const [projectData, setProjectsData] = useState<Projects>();
   const [usersList, setUsersList] = useState<User[]>();
@@ -54,35 +54,35 @@ export function Tables () {
     const { data } = await api.get<DataFetch>('projects', { signal: controller.signal });
 
     const countProjectsComplete = data.projects.filter(project => project.status === 'done').length;
-    const percentageProjectsCompeted = (countProjectsComplete * 100) / data.projects.length;
+    const percentageProjectsCompleted = (countProjectsComplete * 100) / data.projects.length;
 
     setProjectsData({
       projects: data.projects,
-      percentageProjectsCompeted
+      percentageProjectsCompleted
     })
   }
 
   const getUserList = async (controller: AbortController) => {
     const { data } = await api.get<User[]>('user/authors', { signal: controller.signal });
-    
+
     setUsersList(data);
   }
 
   useEffect(() => {
     const controller = new AbortController();
 
-    if(!projectData){
+    if (!projectData) {
       getProjectData(controller);
     }
 
-    if(!usersList){
+    if (!usersList) {
       getUserList(controller);
     }
 
     return () => controller.abort()
   }, [])
 
-  if(!projectData || !usersList){
+  if (!projectData || !usersList) {
     return (
       <Loading />
     );
@@ -91,13 +91,13 @@ export function Tables () {
   return (
     <Container>
       <AuthorsTable
-        users={usersList} 
+        users={usersList}
         setUsersList={setUsersList}
       />
 
-      <ProjectsTable 
-        projects={projectData.projects} 
-        percentageProjectsCompeted={projectData.percentageProjectsCompeted}
+      <ProjectsTable
+        projects={projectData.projects}
+        percentageProjectsCompleted={projectData.percentageProjectsCompleted}
         setProjectsList={setProjectsData}
       />
     </Container>

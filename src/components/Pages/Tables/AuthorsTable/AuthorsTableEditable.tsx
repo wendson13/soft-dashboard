@@ -26,12 +26,12 @@ type AuthorsTableEditableProps = {
       secondary: string;
     }
   }
-  
-  saveEditing: ({}: UserChangeType) => void;
+
+  saveEditing: ({ }: UserChangeType) => void;
   isLoading: boolean;
 }
 
-export function AuthorsTableEditable ({ user, saveEditing, isLoading } : AuthorsTableEditableProps ) {
+export function AuthorsTableEditable({ user, saveEditing, isLoading }: AuthorsTableEditableProps) {
 
   const [userFunction, setUserFunction] = useState<userFunctionType>(user.functions);
   const [employed, setEmployed] = useState(user.employed.substring(0, 10));
@@ -47,7 +47,7 @@ export function AuthorsTableEditable ({ user, saveEditing, isLoading } : Authors
 
   return (
     <TableRowBodyEditable key={user.id}>
-      
+
       <MemberBox>
         <img src={user.imageUrl} alt={user.name} />
         <div>
@@ -57,21 +57,24 @@ export function AuthorsTableEditable ({ user, saveEditing, isLoading } : Authors
       </MemberBox>
 
       <FunctionBoxEditable>
-        <input 
-          type="text" 
+        <input
+          autoFocus
+          type="text"
           value={userFunction.primary}
           onChange={(e) => setUserFunction(state => (
-            { primary: e.target.value,
+            {
+              primary: e.target.value,
               secondary: state.secondary
             }))
           }
         />
 
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={userFunction.secondary}
           onChange={(e) => setUserFunction(state => (
-            { primary: state.primary,
+            {
+              primary: state.primary,
               secondary: e.target.value,
             }))
           }
@@ -92,12 +95,12 @@ export function AuthorsTableEditable ({ user, saveEditing, isLoading } : Authors
 
       <td>
         {
-          isLoading ? 
-          <Spinner size={2}  borderSize={.5} />
-          :
-          <button onClick={handleSaveUserInfo}>
-            Save
-          </button>
+          isLoading ?
+            <Spinner size={2} borderSize={.5} />
+            :
+            <button onClick={handleSaveUserInfo}>
+              Save
+            </button>
         }
       </td>
     </TableRowBodyEditable>

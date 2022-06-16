@@ -6,14 +6,21 @@ type User = {
   imageUrl: string;
 }
 
+type Status = 'working' | 'canceled' | 'done';
+
 type Project = {
-  company: string;
+  id: string;
+  name: string;
+  description: string;
+  logoUrl: string;
+  coverUrl: string;
   members: User[];
   users: number;
   clients: number;
   sales: number;
   budget: number;
-  percentageCompeted: number;
+  percentageCompleted: number;
+  status: Status;
 }
 
 type Author = {
@@ -88,11 +95,36 @@ export function makeServer({ environment = "test" } = {}) {
 
   const monthly = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
+  const functionsType = [
+    {
+      primary: 'Manager',
+      secondary: 'Organization'
+    },
+    {
+      primary: 'Programmer',
+      secondary: 'Developer'
+    },
+    {
+      primary: 'Executive',
+      secondary: 'Projects'
+    },
+    {
+      primary: 'Marketing',
+      secondary: 'Organization'
+    },
+    {
+      primary: 'Tester',
+      secondary: 'Developer'
+    },
+  ];
+
+  const statusType = ['Online', 'Offline']
+
   let server = createServer({
     environment,
 
     models: {
-      project: Model.extend<Partial<Project>>({}),
+      project: Model.extend<Project>({} as Project),
       author: Model.extend<Partial<Author>>({}),
       billingsInfo: Model.extend<Partial<BillingsInfo>>({}),
       paymentMethod: Model.extend<Partial<PaymentMethod>>({}),
@@ -104,11 +136,12 @@ export function makeServer({ environment = "test" } = {}) {
 
     factories: {
       project: Factory.extend({
+
         id() {
           return faker.datatype.uuid();
         },
 
-        projectCover() {
+        coverUrl() {
           const imageUrl = ['https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80', 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80']
 
           return imageUrl[Math.round(Math.random() * 2)]
@@ -122,7 +155,7 @@ export function makeServer({ environment = "test" } = {}) {
           return faker.company.companyName();
         },
 
-        imageUrl() {
+        logoUrl() {
           return './logo-short.svg';
         },
 
@@ -154,7 +187,7 @@ export function makeServer({ environment = "test" } = {}) {
           return faker.datatype.number({ min: 1357, max: 50000 });
         },
 
-        percentageCompeted() {
+        percentageCompleted() {
           return faker.datatype.number(100);
         },
 
@@ -183,7 +216,6 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         status() {
-          const statusType = ['Online', 'Offline']
 
           return statusType[Math.round(Math.random())]
         },
@@ -193,28 +225,6 @@ export function makeServer({ environment = "test" } = {}) {
         },
 
         functions() {
-          const functionsType = [
-            {
-              primary: 'Manager',
-              secondary: 'Organization'
-            },
-            {
-              primary: 'Programmer',
-              secondary: 'Developer'
-            },
-            {
-              primary: 'Executive',
-              secondary: 'Projects'
-            },
-            {
-              primary: 'Marketing',
-              secondary: 'Organization'
-            },
-            {
-              primary: 'Tester',
-              secondary: 'Developer'
-            },
-          ]
 
           return functionsType[Math.ceil(Math.random() * 4)]
         }
@@ -294,7 +304,7 @@ export function makeServer({ environment = "test" } = {}) {
     },
 
     seeds(server) {
-      server.createList('project', 50);
+      server.createList('project', 2);
       server.createList('author', 5);
       server.createList('billingsInfo', 10);
       server.createList('paymentMethod', 2);
@@ -338,7 +348,7 @@ export function makeServer({ environment = "test" } = {}) {
       this.namespace = 'api';
       this.timing = 750;
 
-      this.get('/projects', (schema, _) => {
+      this.get('projects', (schema, _) => {
         const projects = schema.all('project').models as Project[];
 
         const summaryMonth = () => {
@@ -394,9 +404,46 @@ export function makeServer({ environment = "test" } = {}) {
         };
       });
 
+      this.post('/projects', (schema, req) => {
+        const data = JSON.parse(req.requestBody) as Partial<Project>;
+
+        if (data) {
+          try {
+            const { attrs }: { attrs: Project } = schema.create('project', {
+              id: faker.datatype.uuid(),
+              name: data.name,
+              description: data.description,
+              coverUrl: data.coverUrl,
+              logoUrl: data.coverUrl,
+              members: data.members,
+              percentageCompleted: 0,
+              status: 'working',
+              sales: faker.datatype.number({ min: 1357, max: 50000 }),
+              clients: faker.datatype.number({ min: 100, max: 100000 }),
+              budget: faker.datatype.number({ min: 100, max: 100000 }),
+              users: faker.datatype.number({ min: 50, max: 10000 }),
+            })
+
+            return new Response(200, {}, {
+              id: attrs.id,
+              name: attrs.name,
+              coverUrl: attrs.coverUrl,
+              description: attrs.description,
+              members: attrs.members,
+            });
+
+          } catch (e) {
+            return new Response(400, {}, { error: 'Bad Request' });
+          }
+        }
+        else {
+          return new Response(400, {}, { error: 'Bad Request' });
+        }
+      })
+
       this.get('projects/:id');
 
-      this.post('projects/:id', (schema, req) => {
+      this.put('projects/:id', (schema, req) => {
 
         const id = req.params.id;
         const data = JSON.parse(req.requestBody)
@@ -409,7 +456,7 @@ export function makeServer({ environment = "test" } = {}) {
           project.update({
             status: data.status,
             budget: data.budget,
-            percentageCompeted: data.percentageCompeted
+            percentageCompleted: data.percentageCompleted
           })
 
           return project.attrs
@@ -459,6 +506,25 @@ export function makeServer({ environment = "test" } = {}) {
         const authors = schema.all('author').models as Author[];
 
         return authors;
+      })
+
+      this.get('authors/:id', async (schema, req) => {
+        const authors = schema.all('author').models as Author[];
+
+        const result = authors.filter(author => author.name.toLowerCase()
+          .includes(req.params.id.toLowerCase())).map(author => {
+            return {
+              id: author.id,
+              imageUrl: author.imageUrl,
+              name: author.name,
+            }
+          }) as Partial<Author>;
+
+        if (result) {
+          return result;
+        }
+
+        return {};
       })
 
       this.post('user/authors/:id', (schema, req) => {
@@ -693,7 +759,7 @@ export function makeServer({ environment = "test" } = {}) {
         }
       })
 
-      this.post('/login', (schema, req) => {
+      this.post('login', (schema, req) => {
         const data = JSON.parse(req.requestBody) as Partial<UserModelType>
 
         const user = schema.findBy('user', {
@@ -712,7 +778,7 @@ export function makeServer({ environment = "test" } = {}) {
         }
       })
 
-      this.put('/register', (schema, req) => {
+      this.post('register', (schema, req) => {
 
         const data: Partial<UserModelType> = JSON.parse(req.requestBody)
 

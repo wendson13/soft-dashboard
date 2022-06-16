@@ -26,7 +26,7 @@ type User = {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export const AuthContextProvider = (props : AuthContextProviderProps) => {
+export const AuthContextProvider = (props: AuthContextProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigate();
@@ -38,9 +38,9 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
   }
 
   useEffect(() => {
-    
+
     getUserStorage().then(user => {
-      if(user){
+      if (user) {
         setUser(user);
       }
 
@@ -54,14 +54,14 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
         email, password
       })
 
-      if(data.id){
-        if(remember){
+      if (data.id) {
+        if (remember) {
           localStorage.setItem('soft-dashboard@user', JSON.stringify(data))
         }
 
         setUser({
           id: data.id
-        })  
+        })
       }
 
     } catch (error) {
@@ -69,16 +69,16 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
     }
   }
 
-  const signUp = async ({ email, password } : UserSignProps) => {
+  const signUp = async ({ email, password }: UserSignProps) => {
     try {
-      const { data } = await api.put<User>('register', {
+      const { data } = await api.post<User>('register', {
         email, password
       })
 
-      if(data.id){
+      if (data.id) {
         setUser({
           id: data.id,
-        })  
+        })
       }
     } catch (error) {
       console.log(error)
@@ -88,7 +88,7 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
   const signOut = () => {
     localStorage.removeItem('soft-dashboard@user');
     setUser(null);
-    
+
     navigation('/login');
   }
 
@@ -96,5 +96,5 @@ export const AuthContextProvider = (props : AuthContextProviderProps) => {
     <AuthContext.Provider value={{ user, signIn, signUp, signOut, loading }}>
       {props.children}
     </AuthContext.Provider>
-    )
+  )
 }

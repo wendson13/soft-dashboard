@@ -50,6 +50,61 @@ export const Content = styled(DropdownMenuPrimitive.Content)`
   border-radius: .25rem;
   box-shadow: .1rem .1rem .5rem ${({ theme }) => theme.colors.gray6};
   background: ${({ theme }) => theme.colors.gray1};
+  opacity: 0;
+  transition: .3s;
+
+  &[data-state="open"] {
+
+    &[data-side="top"] { animation: slideUpAndFade .3s linear forwards };
+    &[data-side="bottom"] { animation: slideDownAndFade .3s linear forwards };
+    &[data-side="left"] { animation: slideLeftAndFade .3s linear forwards };
+    &[data-side="right"] { animation: slideRightAndFade .3s linear forwards };
+  }
+  
+  @keyframes slideUpAndFade {
+    0% {
+      opacity: 0;
+      transform: translateY(.1rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDownAndFade {
+    0% {
+      opacity: 0;
+      transform: translateY(-.1rem);
+    }
+    100% {
+      opacity: 1;
+      transform:translateY(0);
+    }
+  }
+
+  @keyframes slideRightAndFade {
+    0% { 
+      opacity: 0; 
+      transform: translateX(-.1rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideLeftAndFade  {
+    10% {
+      opacity: 0;
+      transform: translateX(.1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `;
 
 export const Item = styled(DropdownMenuPrimitive.Item)`

@@ -5,10 +5,11 @@ import { Content, Overlay } from './styles';
 type ModalProps = {
   children: ReactNode;
   isOpen: boolean;
+  onCancelled?: () => void;
   width: number | string;
 }
 
-export const Modal = ({ children, isOpen, width }: ModalProps) => (
+export const Modal = ({ children, isOpen, width, onCancelled }: ModalProps) => (
 
   <Dialog.Root open={isOpen}>
 
@@ -16,7 +17,11 @@ export const Modal = ({ children, isOpen, width }: ModalProps) => (
 
       <Overlay />
 
-      <Content style={{ width }}>
+      <Content
+        style={{ width }}
+        onInteractOutside={onCancelled}
+        onEscapeKeyDown={onCancelled}
+      >
         {children}
       </Content>
 

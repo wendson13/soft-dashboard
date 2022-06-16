@@ -29,7 +29,7 @@ type DataType = {
       answers: boolean;
       mentions: boolean;
     };
-  
+
     application: {
       projects: boolean;
       products: boolean;
@@ -59,7 +59,7 @@ type Member = {
 type ProjectType = {
   id: string;
   name: string;
-  projectCover: string;
+  coverUrl: string;
   description: string;
   members: Member[];
 }
@@ -72,14 +72,14 @@ type DataFetch = DataType & {
   userInfo: Info;
 }
 
-export function Profile () {
+export function Profile() {
 
   const [data, setData] = useState<DataType>();
   const [userInfo, setUserInfo] = useState<Info>();
   const [projects, setProjects] = useState<ProjectType[]>();
-  
+
   const handleGetProfileData = async () => {
-    await api.get<DataFetch>('user/profile').then( ({data}) => {
+    await api.get<DataFetch>('user/profile').then(({ data }) => {
       setData({
         settings: data.settings,
         conversations: data.conversations
@@ -95,7 +95,7 @@ export function Profile () {
         id: String(data.projects.length - index),
         name: project.name,
         description: project.description,
-        projectCover: project.projectCover,
+        coverUrl: project.coverUrl,
         members: project.members
       }
     }).reverse();
@@ -104,12 +104,12 @@ export function Profile () {
   }
 
   useEffect(() => {
-    if(!data) {
+    if (!data) {
       handleGetProfileData()
     }
   }, [data]);
 
-  if(!data || !userInfo || !projects){
+  if (!data || !userInfo || !projects) {
     return (
       <Loading />
     );
@@ -131,7 +131,10 @@ export function Profile () {
           <Conversations conversations={data.conversations} />
         </Options>
 
-        <ProjectsSection projects={projects} /> 
+        <ProjectsSection
+          projects={projects}
+          setProjects={setProjects}
+        />
       </main>
 
       <Footer />
@@ -156,5 +159,10 @@ const Container = styled.div`
 
 const Options = styled.section`
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  & > * {
+    max-width: calc(33% - .5rem);
+  }
 `;

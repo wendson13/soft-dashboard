@@ -11,7 +11,7 @@ type SelectProps = {
 
 export function Select({ selectItemsId, onValueChange }: SelectProps) {
   return (
-    <SelectPrimitive.Root defaultValue="visa" onValueChange={value => onValueChange(value)}>
+    <SelectPrimitive.Root defaultValue={selectItemsId[0]} onValueChange={value => onValueChange(value)}>
       <SelectTrigger aria-label="card">
         <SelectPrimitive.Value />
 
